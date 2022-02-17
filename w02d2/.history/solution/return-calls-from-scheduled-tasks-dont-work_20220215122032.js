@@ -11,7 +11,7 @@ const doLater = function(){
 }
 
 
-setTimeout(doLater,1000);
+// setTimeout(doLater,1000);
 
 
 // this way of doing things... takes into consideration the fact that return values don't work.

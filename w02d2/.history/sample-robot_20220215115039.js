@@ -13,19 +13,6 @@ function doAction(name, duration, nextAction){
 
 }
 
-
-
-function processThis(ii){
-  const jj = ii + 5;
-  console.log('jj',jj);
-
-  setTimeout( () => { console.log('a thing')}, 7899 );
-
-  return jj;
-}
-
-
-
 // function sleepFor(sleepDuration) {
 //   const nowObject = new Date();
 // //  console.log("nowObject:",JSON.stringify(nowObject));
@@ -39,7 +26,7 @@ function processThis(ii){
 // Look
 //
 const look = function(){
-  doAction("Look",995, look);
+  doAction("Look",500, getUp);
 };
 
 
@@ -75,9 +62,8 @@ const walkThroughTheDoor = function(){
 
 
 look();
-getUp();
 
-console.log("The main thread is now finished.");
+console.log("I am done being programmed.");
 
 
 //

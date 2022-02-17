@@ -1,30 +1,14 @@
 const start = Date.now();
 
-               // "Look", 500,     getUp
+               // "Get Up",1500
 function doAction(name, duration, nextAction){
   console.log(`Starting ${name}`);
 
   setTimeout( function(){
     console.log(`Ending ${name}`);
-    if (nextAction) {
-      nextAction();
-    }
   }, duration ); 
 
 }
-
-
-
-function processThis(ii){
-  const jj = ii + 5;
-  console.log('jj',jj);
-
-  setTimeout( () => { console.log('a thing')}, 7899 );
-
-  return jj;
-}
-
-
 
 // function sleepFor(sleepDuration) {
 //   const nowObject = new Date();
@@ -39,7 +23,7 @@ function processThis(ii){
 // Look
 //
 const look = function(){
-  doAction("Look",995, look);
+  doAction("Look",500, getUp);
 };
 
 
@@ -74,10 +58,7 @@ const walkThroughTheDoor = function(){
 };
 
 
-look();
-getUp();
-
-console.log("The main thread is now finished.");
+console.log("I am done being programmed.");
 
 
 //

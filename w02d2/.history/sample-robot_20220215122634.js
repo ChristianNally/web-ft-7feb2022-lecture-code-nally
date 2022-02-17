@@ -18,9 +18,6 @@ function doAction(name, duration, nextAction){
 function processThis(ii){
   const jj = ii + 5;
   console.log('jj',jj);
-
-  setTimeout( () => { console.log('a thing')}, 7899 );
-
   return jj;
 }
 

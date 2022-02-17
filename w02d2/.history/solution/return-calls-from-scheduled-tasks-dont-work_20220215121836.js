@@ -11,12 +11,12 @@ const doLater = function(){
 }
 
 
-setTimeout(doLater,1000);
+console.log("monkeyfuzz",setTimeout(doLater,1000));
 
 
 // this way of doing things... takes into consideration the fact that return values don't work.
 
-// const fs = require('fs');
-// fs.readFile('filename.txt','utf8',callback);
+const fs = require('fs');
+fs.readFile('filename.txt','utf8',callback);
 
 

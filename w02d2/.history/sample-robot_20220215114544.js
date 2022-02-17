@@ -1,30 +1,14 @@
 const start = Date.now();
 
-               // "Look", 500,     getUp
+               // "Get Up",1500
 function doAction(name, duration, nextAction){
   console.log(`Starting ${name}`);
 
   setTimeout( function(){
     console.log(`Ending ${name}`);
-    if (nextAction) {
-      nextAction();
-    }
   }, duration ); 
 
 }
-
-
-
-function processThis(ii){
-  const jj = ii + 5;
-  console.log('jj',jj);
-
-  setTimeout( () => { console.log('a thing')}, 7899 );
-
-  return jj;
-}
-
-
 
 // function sleepFor(sleepDuration) {
 //   const nowObject = new Date();
@@ -39,7 +23,7 @@ function processThis(ii){
 // Look
 //
 const look = function(){
-  doAction("Look",995, look);
+  doAction("Look",500, getUp);
 };
 
 
@@ -47,14 +31,14 @@ const look = function(){
 // Get Up
 //
 const getUp = function(){
-  doAction("Get Up",1500, walk);
+  doAction("Get Up",1500);
 };
 
 //
 // Walk
 //
 const walk = function(){
-  doAction("Walk",5000,openTheDoor);
+  doAction("Walk",5000);
 };
 
 
@@ -62,7 +46,7 @@ const walk = function(){
 // openTheDoor
 //
 const openTheDoor = function(){
-  doAction("Open The Door",2500,walkThroughTheDoor);
+  doAction("Open The Door",2500);
 };
 
 
@@ -70,14 +54,11 @@ const openTheDoor = function(){
 // walkThroughTheDoor
 //
 const walkThroughTheDoor = function(){
-  doAction("Walk Through The Door",3500,null);
+  doAction("Walk Through The Door",3500);
 };
 
 
-look();
-getUp();
-
-console.log("The main thread is now finished.");
+console.log("I am done being programmed.");
 
 
 //
