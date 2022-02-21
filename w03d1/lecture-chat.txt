@@ -1,0 +1,48 @@
+00:18:17	Manuel Zuniga:	Is Node an actual company?
+00:25:28	Ryan Mac:	what's the most useless?
+00:25:57	Manuel Zuniga:	Haha fair enough
+00:26:36	Ryan Mac:	what does the response.end() method do?
+00:31:21	Ethan Loewen:	it tried getting the fav icon
+00:31:26	Ethan Loewen:	the little image at the top
+00:34:52	Vince Emond:	Would you typically update the reponse.statusMessage as well for 404?
+00:47:42	Richard Au:	How can you check which packages are available for node?
+00:51:07	Bryce Brandford:	can you explain filepath?
+00:54:50	Kent Gulka:	so this is where any server tags can be populated using a file template.
+01:10:11	Manuel Zuniga:	coffee
+01:10:11	Pablo Tack:	coffee
+01:10:11	Kelsi Olstad:	coffee
+01:10:12	Ethan Loewen:	gotta be coffee
+01:10:12	Ahsan Irfan:	coffee
+01:10:15	Bryce Brandford:	coffee
+01:10:16	Yuki Fujiwara:	coffee
+01:10:16	Vincent Ybanez:	coffee
+01:10:23	Ryan Mac:	pizza?
+01:10:31	Manuel Zuniga:	Sloppy naan, coffee being poured on naan
+01:10:48	Vince Emond:	Naan being cooked in the coffee pot?
+01:31:00	Ryan Mac:	reminder of what the --save flag does?
+01:31:35	Dylan Pirrotta:	does the render method expect index.html to be in the views folder?
+01:32:24	Dylan Pirrotta:	nvm looks like it doesn't
+01:37:42	Vincent Ybanez:	instead of index.ejs, can we keep .html extension by doing this: res.render(‘views/index')
+02:07:51	Vince Emond:	The alligator clips: Is that specific to ejs templates, or is it an express thing?
+02:12:42	Kelsi Olstad:	Hi Christian, could you quickly summarize what middleware is again? I think I missed that
+02:16:12	Kelsi Olstad:	Thank you
+02:16:18	dong zhang:	Thanks
+02:19:02	Ryan Mac:	thanks Christian
+02:19:04	Chi Zhang:	Thank you
+02:19:04	Vince Emond:	Thanks
+02:19:09	Josh Sarnecki:	Thank you !
+02:19:10	Kent Gulka:	thanks
+02:19:10	Manuel Zuniga:	Thanks Christian!
+02:19:10	Ethan Loewen:	Thanks, take care
+02:19:10	Elena Chernikova:	Thank you!
+02:19:12	Bryce Brandford:	ty
+02:19:13	Yuki Fujiwara:	Thank you!
+02:19:13	Tony Fu:	Thanks!
+02:19:14	Pablo Tack:	Thanks Christian
+02:19:17	Rhiannon Krowchuk:	Thank you!
+02:19:17	Vincent Ybanez:	thank you!
+02:19:18	RGB:	Thanks!
+02:19:18	Alexandra Scharfenberger:	Thank you
+02:19:20	Dylan Pirrotta:	thank you
+02:19:21	Mustafa Paigeer:	Thanks
+02:19:21	Kelsi Olstad:	Thank you

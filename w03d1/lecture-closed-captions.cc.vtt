@@ -1,0 +1,1811 @@
+WEBVTT
+
+00:00:24.000 --> 00:00:39.000
+let's try that. Okay, today. we're gonna get bright to the point of doing the thing that is what the boot camp is designed to teach you how to do right?
+
+00:00:39.000 --> 00:00:44.000
+How to write your own web servers, how to write your own apps.
+
+00:00:44.000 --> 00:00:53.000
+I'd like to introduce a diagram into our conversations.
+
+00:00:53.000 --> 00:01:03.000
+This diagram is what I like to call the entirety of the whole boot camp.
+
+00:01:03.000 --> 00:01:10.000
+In one slide, and I hope to impress upon you what I mean by that next.
+
+00:01:10.000 --> 00:01:20.000
+But basically, if you think about it, you imagine what happens when you click on a web page on a web app.
+
+00:01:20.000 --> 00:01:30.000
+It might take a half a second if you're Lucky for everything to go on and produce the response that results from that click.
+
+00:01:30.000 --> 00:01:46.000
+Kent take a number of seconds it can take a very long time. indeed, if something's very far away from you, or if there's a lot of complex processing going on, it's very specific but no matter how long it takes to go from one,
+
+00:01:46.000 --> 00:01:53.000
+click to the next click. Everything that happened in between those 2 things is exactly what boot camp is all about.
+
+00:01:53.000 --> 00:02:01.000
+Boot camp is about learning how the web works from one click to the next.
+
+00:02:01.000 --> 00:02:20.000
+And so for this diagram. imagine that you've brought up a web browser, and to get the ball rolling type a Url into the web browser's bar the Url bar right? So you just type it in my
+
+00:02:20.000 --> 00:02:36.000
+house lab sock. Ca: For example, when you hit, enter after having typed in that Url, the following steps happen: First, a request is sent to the web server over Tcp.
+
+00:02:36.000 --> 00:02:44.000
+Ip it's an http request that gets sent, and that's this part of the diagram here, right?
+
+00:02:44.000 --> 00:02:51.000
+So imagine a little on ramp where we send a request by typing in a url into your browser.
+
+00:02:51.000 --> 00:03:05.000
+So next up as we go around this wheel clockwise the server program, the server is hardware is running a server.
+
+00:03:05.000 --> 00:03:14.000
+Program that's gonna take in that input right this request acts as an input into the server.
+
+00:03:14.000 --> 00:03:25.000
+And so the server runs, does its thing, makes some html in the form of a response.
+
+00:03:25.000 --> 00:03:34.000
+That response is going to get sent back over the Internet again to the client.
+
+00:03:34.000 --> 00:03:47.000
+That is the web browser. The web browser will take that response as its inputs renders the html.
+
+00:03:47.000 --> 00:03:55.000
+And whatever else came along with that response and show that to the user on the web page.
+
+00:03:55.000 --> 00:04:07.000
+Now at that point, if the user clicks another link on that page, then the whole process starts over again.
+
+00:04:07.000 --> 00:04:14.000
+And so your experience on the web can be summarized in this circle of clicking from one length to the next.
+
+00:04:14.000 --> 00:04:29.000
+The point of today going to be to focus in on the web server part of things.
+
+00:04:29.000 --> 00:04:43.000
+So with the web server inputs that's the request We're going to see that requests are formed from Http verbs and paths.
+
+00:04:43.000 --> 00:04:48.000
+We're going to see how the server can pick up that data.
+
+00:04:48.000 --> 00:04:58.000
+How it can find some specific code to build a very specific customized response.
+
+00:04:58.000 --> 00:05:09.000
+How, in the process of doing that, it might query a database to figure out some detailed information to go with that specific request.
+
+00:05:09.000 --> 00:05:31.000
+Then finally, we'll see how the dynamic information can be bungled into some html via a thing called a template, at which point the server will then send that resulting html out
+
+00:05:31.000 --> 00:05:38.000
+as a response back to the client, and so on. And so the cycle continues like this.
+
+00:05:38.000 --> 00:06:02.000
+So as for this diagram being like a diagram for the whole of the boot camp, every bit of code that you're going to learn in this boot camp can be put onto this wheel somewhere week, 3 we're gonna
+
+00:06:02.000 --> 00:06:11.000
+learn about this stuff, these especially this step first step middleware this one finding the route code and building the template.
+
+00:06:11.000 --> 00:06:22.000
+We're going to leave the database stuff right for Now our databases are like simple structures that are built into the code that we're using.
+
+00:06:22.000 --> 00:06:32.000
+But the whole of week 5 is going to be all about database Queries Sequel: How to make queries.
+
+00:06:32.000 --> 00:06:40.000
+How to interact with programs and whatnot. So stay tuned for week 5 to come up with some details on what goes on inside this box.
+
+00:06:40.000 --> 00:06:50.000
+The entirety of week. 4 is a this suck the stuff that goes on on the client side here.
+
+00:06:50.000 --> 00:06:53.000
+It'll be client-side javascript Css.
+
+00:06:53.000 --> 00:07:06.000
+And styling and front-end all that kind of stuff goes on in here React lives in this and so on.
+
+00:07:06.000 --> 00:07:09.000
+So i'll be coming back to this diagram time and again.
+
+00:07:09.000 --> 00:07:17.000
+I'll be fleshing it out making it putting more acronyms on it right.
+
+00:07:17.000 --> 00:07:29.000
+This diagram was built from an svg thing will ultimately be able to make it such that you can click on the individual parts, and then get into an index into the material, and So on.
+
+00:07:29.000 --> 00:07:52.000
+That's the idea. So first things first we want to set up about the task of building a web server from scratch, and to do that we're going to use node.
+
+00:07:52.000 --> 00:08:05.000
+Right. So node is the implementation of javascript that you've been using all along for your cadas for your tests for all that stuff been using it from the terminals.
+
+00:08:05.000 --> 00:08:20.000
+And we're gonna go ahead and write some some node in a way that's gonna bring up a web server.
+
+00:08:20.000 --> 00:08:30.000
+So first, a small introduction to node itself, and what it is, and how it holds together.
+
+00:08:30.000 --> 00:08:40.000
+So here are the Docs for node itself quick show of hands who's been poking through this stuff to see some of the details.
+
+00:08:40.000 --> 00:09:10.000
+About node just a little bit. Yeah. So node has a bunch of packages where you can bring code into your node Javascript, and you can then leverage code that's been written by other people and built into
+
+00:09:11.000 --> 00:09:17.000
+node in such a way that you don't have to reinvent the wheel.
+
+00:09:17.000 --> 00:09:25.000
+You can. Npm. require code in, and then go from there.
+
+00:09:25.000 --> 00:09:42.000
+So this first exercise that we're, going to do about building a web server from scratch that we're gonna leverage packages that are built into node directly.
+
+00:09:42.000 --> 00:09:57.000
+So let's go ahead and do that for 6 first we want to bring in package called Http.
+
+00:09:57.000 --> 00:10:26.000
+Like. So now, with a package called http put in place, we can write code that's going to act like a web server in the following way: will create a server that's a factory function built into the
+
+00:10:26.000 --> 00:10:33.000
+Http object that comes back from this require and then ultimately.
+
+00:10:33.000 --> 00:10:46.000
+We're gonna go server, Dot. listen now, this parameter is going to this function Call is going to take 2 parameters.
+
+00:10:46.000 --> 00:11:07.000
+The first is port, which is a port number Then the second one is a callback that that will execute whenever the server is ready to be listening.
+
+00:11:07.000 --> 00:11:31.000
+So let's just run a console log in here so that we can see precisely that server is running on court port like, so so we'll need a variable for this cons port.
+
+00:11:31.000 --> 00:11:47.000
+Equals. let's say 3,001 and that's It that's a web server in 8 lines right.
+
+00:11:47.000 --> 00:11:53.000
+It's probably the most useless web server ever because it doesn't actually do anything when you make a request to it.
+
+00:11:53.000 --> 00:11:58.000
+But those 3 lines that's the basics of getting the thing in place.
+
+00:11:58.000 --> 00:12:09.000
+So how are we gonna get this web server to do anything for us with a callback?
+
+00:12:09.000 --> 00:12:25.000
+So when you set up your server you can pass in a callback here, So i'm gonna go ahead and put in a callback right?
+
+00:12:25.000 --> 00:12:39.000
+It's just a blank function. definition like so this callback is going to get run whenever it accepts a request.
+
+00:12:39.000 --> 00:13:08.000
+So excuse me. the parameters that this callback are going to take 2 request and response, and so we're going to use those parameters that come into our callback and excuse me.
+
+00:13:08.000 --> 00:13:16.000
+We're gonna start working with them so let's just try things out here.
+
+00:13:16.000 --> 00:13:41.000
+Console Log. A request has been made like that, and for any given request we can do things like this request.
+
+00:13:41.000 --> 00:13:52.000
+Status code. i'll set that to 200 for the moment you'll see what i'm on about in a second.
+
+00:13:52.000 --> 00:14:09.000
+Sorry not request response, because we're building up a response right The response is going to have a status code of 200.
+
+00:14:09.000 --> 00:14:18.000
+We'll have a response, Dot, right which is a way to send some information.
+
+00:14:18.000 --> 00:14:29.000
+Hello, world the traditional thing to start a program with and response.
+
+00:14:29.000 --> 00:14:57.000
+Dot and like So all right, so that's exactly what's gonna happen whenever we make a request of our web server, we should see a console log, and we should see a response with a status code of 200 So here.
+
+00:14:57.000 --> 00:15:10.000
+We are in the sample code directory here is the server file that I've been working on server dash node, and then you can see that that's all of that code.
+
+00:15:10.000 --> 00:15:21.000
+There nothing out my sleeve. The server in Node Js server is running on port 3,001.
+
+00:15:21.000 --> 00:15:29.000
+That callback was called. Let's go check it out on 3,001 local host.
+
+00:15:29.000 --> 00:15:43.000
+Hello! world, sure enough, showed up a request has been made Oh, 2 requests were made.
+
+00:15:43.000 --> 00:15:47.000
+That's interesting we'll get back to why that was the case in a second.
+
+00:15:47.000 --> 00:15:56.000
+So there you have it. The second most useless web server ever built.
+
+00:15:56.000 --> 00:16:05.000
+But it does give us a hook into how we can get started with this stuff.
+
+00:16:05.000 --> 00:16:15.000
+The most useless is the one that didn't respond with any response at all.
+
+00:16:15.000 --> 00:16:37.000
+When I made it. Yeah, is not an actual company node is open source software that usually comes with a foundation. You know what i'm gonna leave that to digging into that on the Node website. and Pm was picked up by
+
+00:16:37.000 --> 00:16:45.000
+Microsoft and Pm. is the world's largest repository of open source software.
+
+00:16:45.000 --> 00:16:58.000
+Okay, So there we go that's a server here is a request.
+
+00:16:58.000 --> 00:17:01.000
+Here's the response that we're building up and then we're sending it back.
+
+00:17:01.000 --> 00:17:12.000
+One thing I would like to do out of curiosity to go ahead and look at the request Object.
+
+00:17:12.000 --> 00:17:17.000
+So i'll make a console log console log.
+
+00:17:17.000 --> 00:17:28.000
+The entirety of the request. Object? Ryan asks why a response end What that does?
+
+00:17:28.000 --> 00:17:32.000
+Is it actually says, Okay, i'm done building up my response you can go and send it.
+
+00:17:32.000 --> 00:17:48.000
+Now this right doesn't occur until the end happens i'll show that in a moment actually, but first we're going to take a quick look here at the request object that came in.
+
+00:17:48.000 --> 00:17:54.000
+So whenever I make changes to the server code, I need to rerun it.
+
+00:17:54.000 --> 00:17:57.000
+Here we are running it again back to the browser.
+
+00:17:57.000 --> 00:18:04.000
+Reload my request This time lots of stuff came out in that console log.
+
+00:18:04.000 --> 00:18:15.000
+The scroll up. let's just take a look at all the amazing amount of data that came in on this request.
+
+00:18:15.000 --> 00:18:39.000
+Page after page after page of it the browser assembled all of this information, put it into a request object, sent it over the Internet, which happens to be like just local to my own development machine at the moment sent all that data through Tcp
+
+00:18:39.000 --> 00:18:45.000
+Ip, the web server picked it all up. lots of pages and pages over here.
+
+00:18:45.000 --> 00:18:54.000
+Okay, here we go right. A request has been made here. Is that label that I put on my console log. super Useful?
+
+00:18:54.000 --> 00:19:02.000
+Right. It is an object of type incoming message. This is built into node.
+
+00:19:02.000 --> 00:19:09.000
+Now inside this object right should trigger on the open curly Brace to see that this is an object.
+
+00:19:09.000 --> 00:19:17.000
+It's God! all sorts of stuff going on in here? is the request closed?
+
+00:19:17.000 --> 00:19:22.000
+Is there. Is there a reading more flag set up is there a socket?
+
+00:19:22.000 --> 00:19:27.000
+That's specific to it Is it Connecting at the moment no is it?
+
+00:19:27.000 --> 00:19:32.000
+Etc. etc. Right events, events associated with the request.
+
+00:19:32.000 --> 00:19:42.000
+The it half open. Can I send back push notifications, Server.
+
+00:19:42.000 --> 00:19:48.000
+It has a server, a reference to the server object also for this particular request.
+
+00:19:48.000 --> 00:19:56.000
+It's a way of grabbing that particular thing out the part the particular Http parser that was used.
+
+00:19:56.000 --> 00:20:02.000
+We can add an event listener to a request that's so much stuff going on in here right?
+
+00:20:02.000 --> 00:20:11.000
+Raw headers. This is interesting we're gonna dig in in a moment to look at the headers that came in with a request.
+
+00:20:11.000 --> 00:20:20.000
+But here they are in their unprocessed state, where you can see what kind of a browser connected to this machine.
+
+00:20:20.000 --> 00:20:27.000
+Was there any cookie information? These are all things that are going to be coming in on the request.
+
+00:20:27.000 --> 00:20:41.000
+But the things that I wanted to focus in on in particular are these 2 that we finally made it down to the Url and the method.
+
+00:20:41.000 --> 00:20:52.000
+Okay, let's start with the Url again this is all coming in on the request object.
+
+00:20:52.000 --> 00:21:00.000
+So if we go back to our server here and this is what's this? is the code that's going to run to handle any given request.
+
+00:21:00.000 --> 00:21:15.000
+Let's instead of putting like the whole of the request let's write out request dot Url, because request is an object right?
+
+00:21:15.000 --> 00:21:24.000
+And so we'll do that and if I go back here restart my server.
+
+00:21:24.000 --> 00:21:31.000
+Go back to the Web page and reload it there i've made a request.
+
+00:21:31.000 --> 00:21:46.000
+I go back to the server. this is interesting. When I hit reload, it said, a request has been made, and then it gave me the url that was was the homepage slash.
+
+00:21:46.000 --> 00:21:53.000
+Then it said, A request has been made. request: Url slash, Fabi, Condon Ico. Any ideas?
+
+00:21:53.000 --> 00:22:03.000
+Why that particular request would have been made. Anybody know what Fab the fab I condon Io is.
+
+00:22:03.000 --> 00:22:08.000
+So the fat of icon is like when you're on a browser.
+
+00:22:08.000 --> 00:22:12.000
+You get these little images that are associated with a tab right?
+
+00:22:12.000 --> 00:22:23.000
+This little globe that's like the default one in chrome, but for any given web request if that's the first time it's going to that thing. it's going to say hey? wait a minute.
+
+00:22:23.000 --> 00:22:33.000
+Do you have a have icon for me if it does it'll send back a little picture that gets included in the tab bookmarks right?
+
+00:22:33.000 --> 00:22:37.000
+Whatever else and that's just something that's built into the modern web.
+
+00:22:37.000 --> 00:22:41.000
+Give me your little icon and i'll use it on the browser side.
+
+00:22:41.000 --> 00:22:54.000
+All that happens automatically. The browser chose to look for that. And so we were able to see that that had happened, even with Code as simple as this.
+
+00:22:54.000 --> 00:23:17.000
+On every request that's made we get to see the url for that particular request. that's cool that means we can start to write custom code that's gonna send back a different response depending on what the Url is that we
+
+00:23:17.000 --> 00:23:30.000
+pick like even now. for example, if I go back to this website, and I go to a path of monkey fuzz right?
+
+00:23:30.000 --> 00:23:36.000
+It requests monkey fuzz. I get Hello, World back, because this is how it responds to all of them, all the requests.
+
+00:23:36.000 --> 00:23:42.000
+But if I go to the thing I go to the terminal, a request has been made made.
+
+00:23:42.000 --> 00:23:47.000
+Another request to Fab Icon because it didn't get one last time. Request url monkey fuzz right.
+
+00:23:47.000 --> 00:23:50.000
+I just typed that into the browser came through as the Url on the back end.
+
+00:23:50.000 --> 00:24:01.000
+So there you go. We have a web server. that is aware of the particular path that is being requested.
+
+00:24:01.000 --> 00:24:17.000
+So why don't we start triggering on that something like, if request got?
+
+00:24:17.000 --> 00:24:28.000
+You Url triple equals slash like so that's the homepage, right?
+
+00:24:28.000 --> 00:24:36.000
+So why don't we make this response that we had here be the homepage?
+
+00:24:36.000 --> 00:24:59.000
+Else we can have a different response. say 4, oh, 4, and the response can be not found like that.
+
+00:24:59.000 --> 00:25:15.000
+So now, when I restart my server and I reload, say the home page, I get Hello, world!
+
+00:25:15.000 --> 00:25:27.000
+But now, if I go after like some other page and hit enter, I get instead, not found.
+
+00:25:27.000 --> 00:25:46.000
+Why? Because I wrote code for that. Vince asks, Would you typically update the response status message as well for 404?
+
+00:25:46.000 --> 00:25:55.000
+Yes, although you know what let's have a look I want to start showing a little bit more detail.
+
+00:25:55.000 --> 00:26:12.000
+Now about requests and responses and as things go with all things web the browser and the front end, and how it interacts with the back end.
+
+00:26:12.000 --> 00:26:28.000
+There's a lot of interesting stuff going on inside the dev tools. So i'm gonna bring up the inspect option right by right-clicking on the web page and bringing up inspect in chrome.
+
+00:26:28.000 --> 00:26:37.000
+Here is the dev tools. This is interesting. We have an error failed to load resource.
+
+00:26:37.000 --> 00:26:40.000
+The server responded with a status code of 404.
+
+00:26:40.000 --> 00:26:48.000
+Some other page, dot one. right? So that error message actually came up, because this return to 4 4, right?
+
+00:26:48.000 --> 00:26:54.000
+If we go back to the homepage that error message should go away like.
+
+00:26:54.000 --> 00:27:08.000
+So here's the html that came back here is the console
+
+00:27:08.000 --> 00:27:24.000
+We'll dig into that in week. 4 the thing that I would like to show you is inside the application Actually, network.
+
+00:27:24.000 --> 00:27:35.000
+Okay. Now, At this point I would like you to think back again.
+
+00:27:35.000 --> 00:27:50.000
+2 that diagram that I showed with the wheel right where, when you type in a url into your browser, it goes and makes a request to the server. The server does a bunch of stuff and sends back some data to
+
+00:27:50.000 --> 00:27:54.000
+you Yeah, So i'm just going to hit reload on this page.
+
+00:27:54.000 --> 00:28:06.000
+This shows the list of requests that the browser made in order to fulfill that request and show something on this side.
+
+00:28:06.000 --> 00:28:20.000
+So here we have particular request. It took about 20 ms super fast, because it's not even touching the real Internet, right?
+
+00:28:20.000 --> 00:28:26.000
+It's just staying within the computer running a piece of code, and then we' a result back to the browser straightaway.
+
+00:28:26.000 --> 00:28:35.000
+But in here we've got the headers that go with this request.
+
+00:28:35.000 --> 00:28:41.000
+So there's some general headers that shows the request Url shows this request.
+
+00:28:41.000 --> 00:28:47.000
+Method. We'll come back to that shows the status code 200 right?
+
+00:28:47.000 --> 00:28:53.000
+This is the stuff that came back from that request tells us about the remote address.
+
+00:28:53.000 --> 00:29:05.000
+The port all sorts of things, some response headers the date that it was made at.
+
+00:29:05.000 --> 00:29:14.000
+How long to keep the connection alive, for what kind of encoded we have request headers.
+
+00:29:14.000 --> 00:29:23.000
+When you send a request to a web server, the browser includes all sorts of information.
+
+00:29:23.000 --> 00:29:33.000
+What kind of information it will accept back, whether or not it can automatically unzip stuff on the fly, whether it's going to be cached or not.
+
+00:29:33.000 --> 00:29:47.000
+Whether or not There's cookies being sent to the server we'll get into those later things about the language that you're trying to use Here's the string that represents the particular kind of browser that you're
+
+00:29:47.000 --> 00:29:53.000
+using all sorts of stuff in here. If I move over to the response Tab.
+
+00:29:53.000 --> 00:30:04.000
+That's the actual response. Now that came back. sorry. just interrupt really quickly, Chris, go ahead just when you're looking the headers I saw that you were on Mozilla.
+
+00:30:04.000 --> 00:30:08.000
+Does that mean like like stuff like what type of browser we're using?
+
+00:30:08.000 --> 00:30:18.000
+Is exposed to the to the server in a lot of sense. too, like you can tell, because you're using a firefox that I would imagine right yeah, i'm actually using chrome and Yes, it's that chrome
+
+00:30:18.000 --> 00:30:24.000
+is based on Mozilla code. now, it says safari here as well.
+
+00:30:24.000 --> 00:30:39.000
+Here's the thing browsers don't always tell the complete truth, and the things that we see in here for strings. Speaking of telling whether or not somebody's lying based on the text based on the discussion we had before class
+
+00:30:39.000 --> 00:30:46.000
+started. This is the user agent string that the browser is choosing to emit.
+
+00:30:46.000 --> 00:31:04.000
+The details of this are a lot to do with how the browser was built, which code did it rely on which versions are included in it. Right and in theory, your server could check the user agent string from within the
+
+00:31:04.000 --> 00:31:10.000
+headers and do very specific things based on which Browser was being used right.
+
+00:31:10.000 --> 00:31:14.000
+Who has ever seen a message on the web that said you're using ie.
+
+00:31:14.000 --> 00:31:20.000
+Version 7, and it's too old and this website is not recommended for browsers that are as old as that right?
+
+00:31:20.000 --> 00:31:27.000
+The reason that it's able to do such a thing is because it found that out through the user agent stream, right?
+
+00:31:27.000 --> 00:31:42.000
+What I hope to give you a sense for here just how deep down the rabbit hole we can go, and where to go fishing for information that we can use to build an optimal web response.
+
+00:31:42.000 --> 00:31:51.000
+Cool. Thank you. Yeah. Yeah. sure. Nope: Request Headers response.
+
+00:31:51.000 --> 00:32:02.000
+Headers. right? So a little bit more about these status codes who has seen the http status cats?
+
+00:32:02.000 --> 00:32:11.000
+Yeah, Okay, So you've been introduced to that before There's also the Http status dogs right?
+
+00:32:11.000 --> 00:32:23.000
+Which is the companion set of photographs. So this code is something that we get to set as part of the response for 4, 200.
+
+00:32:23.000 --> 00:32:28.000
+The 404 happened when I typed in something that didn't exist.
+
+00:32:28.000 --> 00:32:41.000
+This shows up a status 404, and so on.
+
+00:32:41.000 --> 00:32:58.000
+So i'm pretty happy with how far we've gotten this is a super like low level, only using stuff that's been built into node to build a web server.
+
+00:32:58.000 --> 00:33:03.000
+Let's continue on that path and flesh out this web server a little bit more.
+
+00:33:03.000 --> 00:33:21.000
+This response. Dot right, is taking some text and establishing that text as the thing that's going to go back as the response.
+
+00:33:21.000 --> 00:33:34.000
+Typically. What you would want, though, is to not just send back texts, but to send back more complete.
+
+00:33:34.000 --> 00:33:45.000
+Html. Suddenly this isn't happy with single ticks on mold on one line.
+
+00:33:45.000 --> 00:33:52.000
+I'm gonna go for a backtick instead should be happier with that.
+
+00:33:52.000 --> 00:34:06.000
+So you know, we're gonna have html be the response that gets sent back to the browser right?
+
+00:34:06.000 --> 00:34:12.000
+This would be much more typical so html Actually, we could put in the boilerplate that are.
+
+00:34:12.000 --> 00:34:16.000
+It's built into our editor let's try that Html.
+
+00:34:16.000 --> 00:34:21.000
+It's in a string so it's not liking it here in this context.
+
+00:34:21.000 --> 00:34:32.000
+But what if I did it here? we'll get that later?
+
+00:34:32.000 --> 00:34:57.000
+Html. This would be some old school html like so right head the head tag body similar here inside the body tag.
+
+00:34:57.000 --> 00:35:11.000
+Let's have an age 2 tag hello world like so and the head tag would usually include something like a title.
+
+00:35:11.000 --> 00:35:28.000
+This is the home page, like so title all right who's bored, watching me type in this html right.
+
+00:35:28.000 --> 00:35:35.000
+It's actually kind of the point sure we just made some html.
+
+00:35:35.000 --> 00:35:39.000
+We changed our server. i'm going back to this let's restart the server again.
+
+00:35:39.000 --> 00:35:48.000
+I go back to my web server, Run it! Hello, world!
+
+00:35:48.000 --> 00:35:59.000
+The text is large, right that's because this time this is what the html response Looked like right.
+
+00:35:59.000 --> 00:36:05.000
+We've actually got html coming out we've got the head.
+
+00:36:05.000 --> 00:36:09.000
+The title tag. Notice, this is the homepage is showing up up here right?
+
+00:36:09.000 --> 00:36:14.000
+I had directed it at a 5 icon, I could change that little icon, and so on.
+
+00:36:14.000 --> 00:36:19.000
+And so it goes we're about to start to write more and more sophisticated responses from our server.
+
+00:36:19.000 --> 00:36:31.000
+But i'm sure you'll agree this is a drag and typing stuff into this web server.
+
+00:36:31.000 --> 00:36:38.000
+This way i'm gonna have a single file it's all gonna be tons of code in one file that I have to.
+
+00:36:38.000 --> 00:36:45.000
+So after this would be far better if had a several file that held this thing.
+
+00:36:45.000 --> 00:36:56.000
+Then I just used my server to go chase a particular file, grab its contents off the file system and then ship that back to the response.
+
+00:36:56.000 --> 00:37:21.000
+So let's do that let's reinvent the wheel to do that, we're going to need to start leveraging some other packages, as you have been doing in the boot camp up to Now, for example,
+
+00:37:21.000 --> 00:37:30.000
+let's bring in the file system package also built into node like so.
+
+00:37:30.000 --> 00:38:00.000
+And let's bring in the path package as Well, and in instead of doing things this way inside our code custom code that's built for this particular power.
+
+00:38:03.000 --> 00:38:29.000
+Instead. let's do something like this file path equals path join double underscore durname comma views.
+
+00:38:29.000 --> 00:38:38.000
+Let's put some files down inside of views sub folder index, html, because that's traditional for the name.
+
+00:38:38.000 --> 00:39:08.000
+The default name for a homepage we'll write a console log retrieving view from biopath like so just so that we can see a bit of information coming back in on the console read file and we're
+
+00:39:10.000 --> 00:39:20.000
+going to read the file at file path. we're going to have a character encoding of Utf 8.
+
+00:39:20.000 --> 00:39:48.000
+Then we're, gonna have a callback this callback will take error, or the file content like so and then, as is typical of callbacks, we'll have if we'll check for an error, if there's an
+
+00:39:48.000 --> 00:40:01.000
+error. Then We're gonna have a certain kind of response Let's pluck this out from here and now.
+
+00:40:01.000 --> 00:40:22.000
+The response code will be 500 instead we'll go response dot right err dot message. so that's going to pick the particular error message.
+
+00:40:22.000 --> 00:40:33.000
+That file path returns to us and send it back to the browser directly, followed by response.
+
+00:40:33.000 --> 00:40:47.000
+Dot end like. So now that's the case if there's an error in our resulting of the file reading. right.
+
+00:40:47.000 --> 00:41:11.000
+But if there's no error then i'm going to have the response, the status code be 200, because it's good, and then the entire file content is going to get shipped back as part of the response, and then
+
+00:41:11.000 --> 00:41:37.000
+we'll have the end there and so that is that callback now. and so, instead of having this code inside that now, the request Url is slash.
+
+00:41:37.000 --> 00:41:47.000
+Then we're going to read this file and Send this file back, and we have an error message option. as Well, now to get this to work here.
+
+00:41:47.000 --> 00:42:08.000
+We need a new directory called Views, and inside the Views Directory we need a new file called index html, and which is going to contain this stuff that we had had before in that string.
+
+00:42:08.000 --> 00:42:21.000
+Like. So so there, you Go there's a file index html. let's go back here to the server. I see a question.
+
+00:42:21.000 --> 00:42:37.000
+Can we explain file path so file path is built up by the way there reason that this code is written this way largely because we want the code to succeed.
+
+00:42:37.000 --> 00:42:41.000
+You know it's no this is node node code running on a computer.
+
+00:42:41.000 --> 00:42:49.000
+We don't know whether or not that computer is Linux or Mac or windows.
+
+00:42:49.000 --> 00:42:54.000
+The file paths may have forward slash, or they may have a backward slash.
+
+00:42:54.000 --> 00:43:08.000
+But this function call will know which of the 2 I should be using it'll know the format for the directory name, for wherever I'm at right.
+
+00:43:08.000 --> 00:43:13.000
+If I go back to my terminal, and I go. Pwd.
+
+00:43:13.000 --> 00:43:19.000
+This is the particular path that i'm on now for the Directory, from which I'm running node.
+
+00:43:19.000 --> 00:43:25.000
+So Durname is automatically going to include all of that stuff at the beginning.
+
+00:43:25.000 --> 00:43:33.000
+Here, followed by forward slash views forward slash index Html.
+
+00:43:33.000 --> 00:43:42.000
+So that's what's going on with file path that way When I feed it into the read the Fs read File.
+
+00:43:42.000 --> 00:43:48.000
+I have the actual full path of the index notation file on my local computer.
+
+00:43:48.000 --> 00:44:01.000
+And so server is going to be able to go find it grab it. If there's any error it's going to send back an error message with a status code of 500 if there's no error it'll set the
+
+00:44:01.000 --> 00:44:19.000
+status code. 200 and send the whole content. of the file over. Okay, let's give it a shot. node server dot Js is running back to the browser reload still works.
+
+00:44:19.000 --> 00:44:37.000
+Let's go in here. Hello, World from a file instead of from the server directly.
+
+00:44:37.000 --> 00:44:45.000
+Might as well be a paragraph tag if we're gonna make this semantic like.
+
+00:44:45.000 --> 00:44:57.000
+So. And so now, if I reload that yeah Now it's nice, right can make changes to this file directly.
+
+00:44:57.000 --> 00:45:06.000
+I don't even have to restart the server we'll talk about that later, and i'm able to refresh the page, Get a new response.
+
+00:45:06.000 --> 00:45:10.000
+It's going, finding the file sending whatever's in that file back to me.
+
+00:45:10.000 --> 00:45:29.000
+This would be even more interesting if I could take some custom data and put it into the response Right?
+
+00:45:29.000 --> 00:45:38.000
+If I could take some dynamic data maybe a person's logged in.
+
+00:45:38.000 --> 00:45:42.000
+I know their first name. I want to be able to include that in here. Right?
+
+00:45:42.000 --> 00:45:52.000
+All of that stuff has to be handled by what is going on here in this code. right?
+
+00:45:52.000 --> 00:46:03.000
+I need to find that custom dynamic data. I need to change the response to put that dynamic data into it.
+
+00:46:03.000 --> 00:46:27.000
+Well, let's establish another page and try this out so for example, if this is the code that i'm using for this particular page the homepage, let's add another one right about here.
+
+00:46:27.000 --> 00:46:41.000
+So now we'll have else if like so and why don't we build up?
+
+00:46:41.000 --> 00:46:45.000
+I've got some sample data kicking around i'm gonna paste it into here in a second.
+
+00:46:45.000 --> 00:46:54.000
+Let's go for some todds and now this time instead of going after a particular file.
+
+00:46:54.000 --> 00:47:17.000
+Let's do it in a slightly different way this time We'll go for 200 straightaway, and for the message that's going to get sent out.
+
+00:47:17.000 --> 00:47:26.000
+We would like this to be stuff that comes from some other arbitrary code.
+
+00:47:26.000 --> 00:47:31.000
+Some are arbitrary data structures, some custom data structures.
+
+00:47:31.000 --> 00:48:01.000
+So one Shortcut I'll take just to show you how this can be done is, i'm gonna grab particular file called Tadues require, and I'm going to put them down inside a directory called db because this is going
+
+00:48:03.000 --> 00:48:10.000
+to be our fked database all right we're not going to get into the all of sequel and all about how databases work.
+
+00:48:10.000 --> 00:48:17.000
+We're going to leave that for week 5 but for now we at least need some data to be able to work with this.
+
+00:48:17.000 --> 00:48:24.000
+So let's make a directory db and inside the Db.
+
+00:48:24.000 --> 00:48:38.000
+Directory. let's make a file called to dos dot Js like so, and I just happen to have some kicking around like.
+
+00:48:38.000 --> 00:48:47.000
+So because we're requiring this file in we're gonna set module exports to be equal to this thing.
+
+00:48:47.000 --> 00:49:01.000
+It's an array of objects quick question are people comfortable with the require and the module exports how to export code from one place and send it to another.
+
+00:49:01.000 --> 00:49:31.000
+So with that file now in place if we go back to here where we've required this into this data to dos Now, if the request Url is slash to dues, then I would like to write out the todd's
+
+00:49:32.000 --> 00:49:39.000
+object, but doing it exactly like this isn't gonna work super precisely.
+
+00:49:39.000 --> 00:50:02.000
+That's what I want to do in order to really achieve that I'm gonna have to do something like this const text output equals Json dot stringify of to dues.
+
+00:50:02.000 --> 00:50:12.000
+Okay, i've taken in a file that file was converted into a data structure and array of objects.
+
+00:50:12.000 --> 00:50:27.000
+If I have an array of augment i'd like to turn it into some text that I can send as back as the response, we're going to re build the Json from which it came and send that out on 2 h
+
+00:50:27.000 --> 00:50:38.000
+custom response for this particular path like. So okay, So with that done that way.
+
+00:50:38.000 --> 00:50:48.000
+Let's give this a shot back to the server homepage should still work. fine right reload.
+
+00:50:48.000 --> 00:50:53.000
+There's the homepage here's the messages a request has been made request.
+
+00:50:53.000 --> 00:50:58.000
+Url is retrieving view from, and it gives the whole path.
+
+00:50:58.000 --> 00:51:07.000
+But now, if I go back here and I go slash to dues. Look at this now.
+
+00:51:07.000 --> 00:51:21.000
+I get some, Json. That was the text that our route spat back out at us. that it's going for is slash-educed.
+
+00:51:21.000 --> 00:51:25.000
+Our terminal should say so. right? a request has been made. request.
+
+00:51:25.000 --> 00:51:42.000
+Yeah, Url slash to do all right. One more thing before we leave this server and move on to a better way of doing this.
+
+00:51:42.000 --> 00:51:48.000
+This is a lot of reinventing the wheel right.
+
+00:51:48.000 --> 00:52:02.000
+Can you imagine if every time you needed to go after a view you needed to write code that read the file in from scratch, I mean clearly this is the kind of thing that we're going to want to abstract out into a
+
+00:52:02.000 --> 00:52:15.000
+factored out function that's going to handle it right and so the more that people did this sort of thing, the more they started to gather code that was solving very common problems.
+
+00:52:15.000 --> 00:52:27.000
+We're going to talk about a package called express which does precisely that expresses a package that's available on Npm.
+
+00:52:27.000 --> 00:52:34.000
+We're gonna bring in that package and we're gonna leverage it to do a lot of this heavy lifting.
+
+00:52:34.000 --> 00:52:50.000
+But before we get there I want to talk one more about one more point, and that is that there's actually another very important thing.
+
+00:52:50.000 --> 00:52:58.000
+I made quick reference to it earlier when we looked at the response in detail.
+
+00:52:58.000 --> 00:53:08.000
+It's the method property of the response and I want to have a quick look at it.
+
+00:53:08.000 --> 00:53:23.000
+So we'll go back here we'll quit the server and restart it, because I change my server code. Go back here, and i'm going to reload this page, and Now when I see the method here this method
+
+00:53:23.000 --> 00:53:34.000
+is a get request it's showing me the http verb that was associated with this request where I typed in the url and hit.
+
+00:53:34.000 --> 00:53:52.000
+Enter. Now get requests are the kinds of requests that you make when you click a link.
+
+00:53:52.000 --> 00:54:00.000
+So let's just say by a way of a demo I go back here and add a link.
+
+00:54:00.000 --> 00:54:15.000
+2 slash to Dus 2 dues so there that's now in the view for the homepage.
+
+00:54:15.000 --> 00:54:24.000
+So if I go back to my home page and reload it, sure enough, I now have a link to slash to dues right.
+
+00:54:24.000 --> 00:54:34.000
+If I click a link like this that is also making a get request.
+
+00:54:34.000 --> 00:54:46.000
+Okay Here's the thing when we're writing our web server code.
+
+00:54:46.000 --> 00:55:03.000
+We're going to want to take into account that http verb so that we can make customized responses that can depend on which Verb was used. even if the path was the same.
+
+00:55:03.000 --> 00:55:22.000
+I could make a get request to the homepage i've got code here that handles that case could make a get request to slash to dues.
+
+00:55:22.000 --> 00:55:30.000
+I currently have code that's giving a particular response no matter what verb i'm using when I hit this path.
+
+00:55:30.000 --> 00:55:49.000
+But I would like to have code that pays attention to that verb, because in practice you can make a post request to slash to dues that's often done when you're going to add another to-do onto the list in
+
+00:55:49.000 --> 00:56:02.000
+fact. So we need our code to be able to respond to which kind of a request is being made.
+
+00:56:02.000 --> 00:56:16.000
+For example, this response here, that where we spat back all the Json that was associated with that variable in our database that's actually intended for a get. request.
+
+00:56:16.000 --> 00:56:20.000
+So why don't we put that as part of the conditional here?
+
+00:56:20.000 --> 00:56:34.000
+Let's say if we dot method triple equals get then we do this thing.
+
+00:56:34.000 --> 00:56:44.000
+Okay, let's just check to make sure it still works restart the server go back to the browser reload.
+
+00:56:44.000 --> 00:56:50.000
+This that came back. Okay, right, and so on. the terminal.
+
+00:56:50.000 --> 00:56:53.000
+The Url is slash to dues. the method is get.
+
+00:56:53.000 --> 00:57:09.000
+But now I'd like to actually be able to add a new to-do onto the list, and so I will go to my template. Right?
+
+00:57:09.000 --> 00:57:12.000
+This is now much easier than it used to be to add new stuff.
+
+00:57:12.000 --> 00:57:14.000
+I could just go in and edit this one file right?
+
+00:57:14.000 --> 00:57:25.000
+But I can do things like add a form the action attribute here can be set to slash todds.
+
+00:57:25.000 --> 00:57:28.000
+You'll see a little later on in the week a little bit more about how forms work.
+
+00:57:28.000 --> 00:57:58.000
+But i'm just gonna introduce it quickly now, method equal post And in this case we're going to say have an input type equal text, and we're gonna have another input type equal submit.
+
+00:57:59.000 --> 00:58:11.000
+Like so and so with that in place if I reload here now, I've got my form for adding new to dues right.
+
+00:58:11.000 --> 00:58:29.000
+Read gordell escher bach say gonna go read that book. i'm gonna submit this form click submit not. for even though i'm at a path of slash-to-dose.
+
+00:58:29.000 --> 00:58:35.000
+Why? Because this form submitted a post request, not a get request.
+
+00:58:35.000 --> 00:58:47.000
+If I go back to the code to look at that this one where it shows the list of to do is a get request.
+
+00:58:47.000 --> 00:58:58.000
+What i'm able to do at this point start by making some more code.
+
+00:58:58.000 --> 00:59:07.000
+Now that is designed to be for the path slashed to do.
+
+00:59:07.000 --> 00:59:30.000
+But with a method of post instead. and so this time i'm going to write as my text output something like the following here is where I would add a to-do to the list.
+
+00:59:30.000 --> 00:59:35.000
+Yeah, i'm just gonna cheat make it super fast so you get the idea here, right?
+
+00:59:35.000 --> 00:59:50.000
+So we'll quit out of that rerun the Server go back to the homepage which has our stuff on it right. Eat a doughnut.
+
+00:59:50.000 --> 01:00:04.000
+It's going to go on to my list of to do someday right now, when I click submit, now it says, here is where I would add it to do to the list. right we've successfully made it that we can hit
+
+01:00:04.000 --> 01:00:09.000
+the slash to Do's path but not with a get request this time.
+
+01:00:09.000 --> 01:00:14.000
+This time it was with a post request when we come back from the break.
+
+01:00:14.000 --> 01:00:30.000
+We we're going to talk about a thing called a route which is the combination of path, and verb together, and that for any given route we're going to be able to build code that responds to it directly and it turns out
+
+01:00:30.000 --> 01:00:39.000
+It's going to be vastly simplified by using express Okay, cool.
+
+01:00:39.000 --> 01:00:45.000
+Let's go, for I mean you know mondays are traditionally.
+
+01:00:45.000 --> 01:00:54.000
+Coffee, coffee, or Nan do people have a preference feel like It's a coffee day, Yeah, all right.
+
+01:00:54.000 --> 01:01:10.000
+I convinced you let's take a real break. Go dance around room. whatever you do to get a fresh set of neurons. Yeah, we could use a piece of video couldn't We see?
+
+01:01:10.000 --> 01:01:40.000
+You all in about 10 min. Yeah. Very good. All right. Welcome back.
+
+01:09:14.000 --> 01:09:44.000
+Everyone. we're going to go back through a couple of slides here to just remind us of where we've come from.
+
+01:11:13.000 --> 01:11:43.000
+No one would Have been okay. So again here's our version of the slide that contains the entirety of the whole boot camp, right as you are using the web you're kind of on a hamster wheel of clicking from
+
+01:11:53.000 --> 01:12:06.000
+one link to the next, and each time you click some information is sent to a web server where the web server will run, build a response.
+
+01:12:06.000 --> 01:12:12.000
+Send that response back to the client. The client will render it, and then you can click another link today.
+
+01:12:12.000 --> 01:12:37.000
+We're focused on this stuff here in this sector inside the red outline, with how the server goes about the steps to build the response in order to build that response.
+
+01:12:37.000 --> 01:12:59.000
+We are going to write some node, some Javascript on the back end, and when we do it from scratch we we pull information out of the request.
+
+01:12:59.000 --> 01:13:06.000
+We match the incoming request to custom code, maybe using some.
+
+01:13:06.000 --> 01:13:27.000
+If thins or something like that, right? And in running that code we run code like response, dot, right, pass it some html, and then response end sends the html back to the client as a response one feature.
+
+01:13:27.000 --> 01:13:47.000
+Of how the web works is that not only is a request going in for a path, But it's also bringing in an Http verb as part of that request Requests that you're used to using are get requests get the stuff at that
+
+01:13:47.000 --> 01:13:53.000
+path. Get this stuff at this other path right clicking on links, typing in Urls into a browser.
+
+01:13:53.000 --> 01:14:02.000
+Those are all get requests often when you submit a form though that's a post request, and it can be made to the same kind of path.
+
+01:14:02.000 --> 01:14:23.000
+So next up we're gonna dig into express and we're gonna do stuff in a way that lot of the things that we had to do are now going to be not so much reinventing the wheel all the time and the nice
+
+01:14:23.000 --> 01:14:30.000
+thing about express is that it does a lot of that heavy lifting that we had to do before.
+
+01:14:30.000 --> 01:14:43.000
+For us, and so let's be rid of this node Js server file instead.
+
+01:14:43.000 --> 01:15:13.000
+We're going to run one based on express so let's open that up and let's get started with how to use express to write a web server surprise surprise you require the express brings in an object for our use then
+
+01:15:16.000 --> 01:15:22.000
+similar to what we had before, where we were creating. the server.
+
+01:15:22.000 --> 01:15:28.000
+Now we're just calling this factory function that comes straight back from there.
+
+01:15:28.000 --> 01:15:58.000
+From that package, then ultimately at the end we're going to have align app dot. Listen a port and a callback console dot log server is listening to port like So and we're gonna of course, gonna need that port variable
+
+01:16:10.000 --> 01:16:18.000
+right port equal. let's put it on 3,002 so it's on a different thing in case there's other stuff kicking around.
+
+01:16:18.000 --> 01:16:28.000
+So. one last step, then, is, how do we respond to a particular request?
+
+01:16:28.000 --> 01:16:51.000
+And with express this gets a little easier. app dot, get a path and a callback.
+
+01:16:51.000 --> 01:17:12.000
+So recall how any given request has both a path and an http verb when you're writing in request and express, you can put your http verb right there.
+
+01:17:12.000 --> 01:17:24.000
+It's got one function defined on app for every one of the different http verbs get post delete put patch.
+
+01:17:24.000 --> 01:17:30.000
+These are all a variety of http. verbs that are defined within express as their own functions.
+
+01:17:30.000 --> 01:17:36.000
+And so here i'm establishing a back-end route, particular kind of request.
+
+01:17:36.000 --> 01:17:49.000
+This is a get request to the homepage, this callback going to take 2 parameters.
+
+01:17:49.000 --> 01:18:05.000
+This callback is the one that gets called whenever this matching request gets requested, we could put request and response as the names of these 2 parameters.
+
+01:18:05.000 --> 01:18:14.000
+You'll often see this abbreviated because otherwise you end up typing it too much right request and response like so.
+
+01:18:14.000 --> 01:18:44.000
+And so for that homepage we can do things like this res dot status 200, and then you can also do res dot, and then render index dot html just like so Now this is actually leveraging the same
+
+01:18:59.000 --> 01:19:07.000
+Views Directory that we had before so that's a little bit of cheating right where that part was already refactored out.
+
+01:19:07.000 --> 01:19:22.000
+Given our previous experience. But this is so much better than having to rewrite a piece of code that goes away looks for a file and finds it that's actually built into this render method Now, as you'll see there's a bunch of
+
+01:19:22.000 --> 01:19:27.000
+stuff that's built into express. we're going to leverage quite a bit of it here today.
+
+01:19:27.000 --> 01:19:39.000
+Okay, now, here's the thing this package is not built into notes.
+
+01:19:39.000 --> 01:19:48.000
+And so we need to start leveraging Npm in order to be able to get that thing.
+
+01:19:48.000 --> 01:19:56.000
+So, for example, if I go back to my terminal kill my old server here do an ls it shows some stuff that's here.
+
+01:19:56.000 --> 01:20:05.000
+I'm gonna just cat the file that's ner server dash express. there's the file that we've written so far.
+
+01:20:05.000 --> 01:20:14.000
+If I try to run it right now, it's going to complain at me, because it can't find the modulus express.
+
+01:20:14.000 --> 01:20:26.000
+So from this position, then we need to go Npm and knit to build up a package.
+
+01:20:26.000 --> 01:20:37.000
+Json file for this particular app so we could make the package name express server.
+
+01:20:37.000 --> 01:20:44.000
+Sorry. No capital letters in in a package name. How about dash?
+
+01:20:44.000 --> 01:20:54.000
+Express server version. One description I have slabs first web server entry, point server dash express.
+
+01:20:54.000 --> 01:21:00.000
+Yes, indeed, that's the one we want no testing yet no get repository.
+
+01:21:00.000 --> 01:21:09.000
+Yet author me without license. Is this cool? Yes. So now we have a package.
+
+01:21:09.000 --> 01:21:30.000
+Json file tuned up to look like that, and I can do Npm install express like. so so it goes away.
+
+01:21:30.000 --> 01:21:39.000
+Goes to the Npm network of open source software grabs that package, brings it in locally into my Node Modules directory.
+
+01:21:39.000 --> 01:21:56.000
+Right do an Ls: I get node underscore modules if I list inside there it shows express along with all the other things that express needed as part of its programming.
+
+01:21:56.000 --> 01:22:04.000
+So now, when I go server expressed javascript, it runs.
+
+01:22:04.000 --> 01:22:21.000
+Let's go looking at what might be in here. local Hosts 3,002 this time cannot find Module Html.
+
+01:22:21.000 --> 01:22:39.000
+Let's see what we've got let's move this for the moment it's trying to load a model called Html.
+
+01:22:39.000 --> 01:22:58.000
+Not sure move back up bit by bit, figure out what's going on here.
+
+01:22:58.000 --> 01:23:12.000
+This is happening at line 7 all right let's drop the status for a second.
+
+01:23:12.000 --> 01:23:29.000
+Try that we'll have to restart the server reload Okay, we're getting closer one more thing.
+
+01:23:29.000 --> 01:23:37.000
+This render call where we're rendering a particular view.
+
+01:23:37.000 --> 01:23:40.000
+This is going to leverage a thing called a template.
+
+01:23:40.000 --> 01:23:50.000
+So this indexed on html file is being seen as a template that's now that I think of it.
+
+01:23:50.000 --> 01:23:55.000
+That's probably related to the message the error message we were getting a second ago, because it was going for an Html Template engine.
+
+01:23:55.000 --> 01:24:20.000
+Okay, when we set up our app in the first place we're actually going to need to specify the particular template engine that we're going to use, and to do that we're going to run app dot set view engine
+
+01:24:20.000 --> 01:24:29.000
+is a text strength, and then the value for that particular view engine is the second parameter.
+
+01:24:29.000 --> 01:24:42.000
+So we've got app dot set view engine ejs and so that line of code sets the template engine.
+
+01:24:42.000 --> 01:24:57.000
+Okay, so we'll try this again. express server reload cannot find module ejs, and so we need to install it.
+
+01:24:57.000 --> 01:25:04.000
+Npm install ejs, and save as a dependency on our package, Dot Json!
+
+01:25:04.000 --> 01:25:15.000
+Now we have the ejs system installed. If I do it now, less on node modules.
+
+01:25:15.000 --> 01:25:25.000
+Now we get ejs, and my guess is that we also have Html.
+
+01:25:25.000 --> 01:25:44.000
+But let's just see so we'll run server express dot Js runs again back here, and we love the homepage failed to look up view index.
+
+01:25:44.000 --> 01:25:57.000
+So the view currently called index html doesn't match with ejs templates. So i'm going to rename this file.
+
+01:25:57.000 --> 01:26:21.000
+Now to index dot Djs like so back to the server reload, and there's our view.
+
+01:26:21.000 --> 01:26:51.000
+So a quick recap, where, before we had to load in a file from a particular subdirectory, and with a particular name it went chasing after that particular file, and then dinner our own read file, to take the content of that file and then
+
+01:26:56.000 --> 01:27:21.000
+send it back as part of the response. Now, when using express we're going to use this thing called a template engine, which goes out, grabs a particular file in a known place inside of views subdirectory with a
+
+01:27:21.000 --> 01:27:26.000
+file name that gets tacked on to this slug.
+
+01:27:26.000 --> 01:27:38.000
+So index dot ejs Now so that's the template the template file, for now is largely just html.
+
+01:27:38.000 --> 01:27:50.000
+But our server is able to pick that file up and render it as part of the response in this single function.
+
+01:27:50.000 --> 01:28:06.000
+Call the route. that is the combination of the path, and the get verb is handled by this line 7.
+
+01:28:06.000 --> 01:28:09.000
+If I want to do a get request for the path slash.
+
+01:28:09.000 --> 01:28:14.000
+That is the homepage. Then I want to render that particular template like.
+
+01:28:14.000 --> 01:28:33.000
+So so Next up let's build a path let's build a route where we can show the toddos just like we did before.
+
+01:28:33.000 --> 01:28:39.000
+So we'll bring in those same to do using the same trick that we did before.
+
+01:28:39.000 --> 01:28:47.000
+Here are the to do like this. That was in a local directory.
+
+01:28:47.000 --> 01:29:12.000
+Db slash toddos dot js and so now we'll have our to do's object, and we're gonna establish another route app dot get slash to dos and that will get its own call back like
+
+01:29:12.000 --> 01:29:26.000
+so, and so we can do res dot send is actually an option which i'll show you.
+
+01:29:26.000 --> 01:29:45.000
+Now we'll do the Json stringified trick just like we did before, to dos like that reds dot end, so we'll go back here.
+
+01:29:45.000 --> 01:29:55.000
+Restart the server. Here is our home page. Now we have a link to to dues.
+
+01:29:55.000 --> 01:30:04.000
+If I click it res is not defined. Oh, I forgot to include my parameters and my callback.
+
+01:30:04.000 --> 01:30:09.000
+Here we go. I'll just show that error message first res is not defined.
+
+01:30:09.000 --> 01:30:15.000
+It got executed when it tried to use Rez inside this callback.
+
+01:30:15.000 --> 01:30:26.000
+So I need to do include it just the way that I had before we can start the server back to the browser.
+
+01:30:26.000 --> 01:30:34.000
+Reload the slash to dice ebola we're getting Json associated with the to dos that we showed from before.
+
+01:30:34.000 --> 01:30:44.000
+I see a few questions. Ryan asks a reminder of what the double dash save command.
+
+01:30:44.000 --> 01:30:54.000
+Does it will take the fact that i'm bringing so this command installs the ejs module.
+
+01:30:54.000 --> 01:31:00.000
+But if I put double dash, save on the back of it then it's going to include it inside my package.
+
+01:31:00.000 --> 01:31:04.000
+Json Directory as a dependency for this package.
+
+01:31:04.000 --> 01:31:09.000
+So in the future. all I need to do is run Npm.
+
+01:31:09.000 --> 01:31:25.000
+Install like that, and it'll load in all of the dependencies, including express and ejs as well don't ask, Does the render method expect index, dot html to be in the views folder Yes, it
+
+01:31:25.000 --> 01:31:31.000
+does we did change that file name to index ejs but it's by default.
+
+01:31:31.000 --> 01:31:40.000
+It's going to go into the views subdirectory here to look for that stuff.
+
+01:31:40.000 --> 01:31:48.000
+You can set this by adding configuration like similar to the app dot set.
+
+01:31:48.000 --> 01:31:53.000
+Call that we did before you can change which directory it's looking in. but for now it's looking in the Views Directory.
+
+01:31:53.000 --> 01:32:08.000
+That's by default Vincent: asks instead of index out Djs: Can we keep the dot html and stack in extension?
+
+01:32:08.000 --> 01:32:20.000
+Potentially. Yeah, But rather than just testing that in in place i'm gonna shove on with the material feel free to to try that out.
+
+01:32:20.000 --> 01:32:31.000
+What I would like to do is talk a little bit more now about express and the kinds of things that we can do with it.
+
+01:32:31.000 --> 01:32:51.000
+Now that We've brought that whole package in there's a lot of nice stuff that's been solved for us ahead of time, for example, I can use wild cards in my path like that this.
+
+01:32:51.000 --> 01:32:57.000
+Is now going to match anything that has not yet been matched.
+
+01:32:57.000 --> 01:33:20.000
+So the way express works is this here's your main thread This is the set of code that's being established to run your web server each time I make an app get call that's going to set up its own
+
+01:33:20.000 --> 01:33:29.000
+separate listener that's gonna listen for these particular requests This one's gonna listen for a request to the homepage.
+
+01:33:29.000 --> 01:33:35.000
+This one's going to listen to a request to slash to dos.
+
+01:33:35.000 --> 01:33:51.000
+If neither of these ones fires, then this one will. So this gives us a chance actually to build our own clever 404 page, for example.
+
+01:33:51.000 --> 01:34:04.000
+So we could do. Now don't let me make that mistake again, of not including my parameters in my callback res dot render.
+
+01:34:04.000 --> 01:34:19.000
+Let's make a a new template 404. So down inside views i'm gonna make a new file 4 4 dot E. J.
+
+01:34:19.000 --> 01:34:40.000
+S. and let's populate. this with some boilerplate html not found, and then say I don't know any shoe tag not found.
+
+01:34:40.000 --> 01:35:10.000
+Check out status cats like so and we'll make that link status cats for a 4 can even get the particular page for 404.
+
+01:35:21.000 --> 01:35:41.000
+Bring that here. So now, if we rerun the server, go back to the to do page it works.
+
+01:35:41.000 --> 01:35:49.000
+If I go to like Monkey Faz not found. Check out status cats link.
+
+01:35:49.000 --> 01:36:02.000
+So that is how fast it is now to build a new route.
+
+01:36:02.000 --> 01:36:06.000
+I just build an ejs template to go with it.
+
+01:36:06.000 --> 01:36:24.000
+Call render inside a callback that's specifically designed for that route. No need to rewrite the code for reinventing the wheel around loading files in It's all handled for you another thing
+
+01:36:24.000 --> 01:36:45.000
+that we could do is establish post route at to do to bring in information from from a form that I might submit like, for example, back here on the homepage right?
+
+01:36:45.000 --> 01:36:57.000
+There's this form where I could add a new to do and so if I do that now watch this we'll get an error.
+
+01:36:57.000 --> 01:37:07.000
+Message cannot post slash to dues this is a message that's coming from express itself.
+
+01:37:07.000 --> 01:37:18.000
+So if you see something like that that's a dead giveaway that yeah, your web server is running it's working.
+
+01:37:18.000 --> 01:37:23.000
+But there's no route to match the particular kind of request that's coming in.
+
+01:37:23.000 --> 01:37:41.000
+So let's write one app dot post slash to dudes, and then we'll grab a callback.
+
+01:37:41.000 --> 01:37:53.000
+Put it in like that, and let's write you know like we had before.
+
+01:37:53.000 --> 01:38:05.000
+This is where I would write code to insert a new to do like that.
+
+01:38:05.000 --> 01:38:19.000
+So the server's rewritten restart it back up reload.
+
+01:38:19.000 --> 01:38:30.000
+Here's our form, read war and peace or peeve clicks Submit.
+
+01:38:30.000 --> 01:38:37.000
+Remember what this form does. It submits a post request to slash to news, And now we've got an endpoint.
+
+01:38:37.000 --> 01:38:46.000
+We've got a route that handles that all right that went by a little bit quickly.
+
+01:38:46.000 --> 01:38:54.000
+Does anybody have any questions about what they've seen you can do a small review at the end?
+
+01:38:54.000 --> 01:39:08.000
+But I think you can get a sense now that this stuff is starting to get faster for writing a web server.
+
+01:39:08.000 --> 01:39:16.000
+Yeah, Richard, go ahead for getting packages on Node and on Npm and express.
+
+01:39:16.000 --> 01:39:22.000
+How do we check what packages are available to require?
+
+01:39:22.000 --> 01:39:36.000
+Good one Npm documentation. So this is the Npm website.
+
+01:39:36.000 --> 01:39:47.000
+This is documentation about np let's go for npm.
+
+01:39:47.000 --> 01:40:00.000
+It itself. There we go. So here we are on the Npm website itself.
+
+01:40:00.000 --> 01:40:29.000
+What are you interested in? Right Well, web servers search for some packages that are associated with building web servers, light server action, hero local web server, total picks a web server crawler stubborn express dom express
+
+01:40:29.000 --> 01:40:52.000
+is going to be in here somewhere. Physics search did that actually execute 565 packages associated with physics.
+
+01:40:52.000 --> 01:41:02.000
+Phaser that's for games so some game physics pocket physics, physics, worlds fast vector calculations, etc.
+
+01:41:02.000 --> 01:41:07.000
+Etc. Right? rinse repeat, You can find a lot of cool stuff, Ryan.
+
+01:41:07.000 --> 01:41:15.000
+Go ahead. Yeah, I just wondered if you could clarify or summarize. ejs!
+
+01:41:15.000 --> 01:41:30.000
+And the template engine. i'm not quite grasping that concept that Yeah, absolutely for this server code, we've got a web server written in 28 lines here.
+
+01:41:30.000 --> 01:41:41.000
+Yeah, are you cool with the idea that when I make a certain request, want the web server to return something particular to that request?
+
+01:41:41.000 --> 01:41:53.000
+Yeah. Okay. So a template splits out the html that would come back for any given request into its own file.
+
+01:41:53.000 --> 01:42:01.000
+Now this code that we have written here so far has line 9.
+
+01:42:01.000 --> 01:42:06.000
+Where this is, where we use the template for the homepage.
+
+01:42:06.000 --> 01:42:15.000
+So you can see how we're establishing a route here for the homepage app dot get slash slashes the path for the homepage.
+
+01:42:15.000 --> 01:42:20.000
+This is the particular callback that runs for the homepage.
+
+01:42:20.000 --> 01:42:28.000
+And so you can see online 9 here res dot render index.
+
+01:42:28.000 --> 01:42:40.000
+So it's going to render a template right so the templates are themselves files that have been split out.
+
+01:42:40.000 --> 01:42:48.000
+We're going for resident render index if I look in the views subdirectory at Index. Dot ejs.
+
+01:42:48.000 --> 01:42:52.000
+This is the particular template that we're going to send back for the homepage.
+
+01:42:52.000 --> 01:43:04.000
+So if I click that this is what this looks like so there's the content of that template this is the exact html that's gonna get sent back here.
+
+01:43:04.000 --> 01:43:11.000
+If I go to the homepage there's the there's what it looks like when the browser renders it.
+
+01:43:11.000 --> 01:43:21.000
+If I inspect this page now, I can see the html directly in the dev tools.
+
+01:43:21.000 --> 01:43:25.000
+This here in Devtools is exactly what is in this file.
+
+01:43:25.000 --> 01:43:38.000
+Here right? and so now that we're using a template engine. It allows us to do some pretty interesting things right Here's my template for the not found page. right?
+
+01:43:38.000 --> 01:43:59.000
+If I go back to my server code this particular route doesn't try to render the homepage template Instead, it tries to render the 404 cool Now, here's where it starts to get super
+
+01:43:59.000 --> 01:44:11.000
+interesting because I can take dynamic data like our todd's list, and I can feed that into a template.
+
+01:44:11.000 --> 01:44:21.000
+This is what templates are for so we're going to take that next step where we take excuse me.
+
+01:44:21.000 --> 01:44:36.000
+We take the todd's data structure that we've brought in, and we're going to fold it together with some html to make some custom html that's specific to the data that we have
+
+01:44:36.000 --> 01:44:58.000
+So let's go down that path instead of doing it this way. i'm gonna have res dot render a tado's template.
+
+01:44:58.000 --> 01:45:28.000
+So inside my views. directory i'm going to make a new file called to do is Dot ejs, and inside that i'm gonna bring up some boilerplate list of to do like so so now I want to
+
+01:45:28.000 --> 01:45:45.000
+show how I am going to write code inside my server, where I specified the route for a get request to slash to dos.
+
+01:45:45.000 --> 01:46:02.000
+I want to take my to-do's, object, for from here and pass it into this template, so that it becomes a very becomes available as a variable within the template.
+
+01:46:02.000 --> 01:46:16.000
+And so the way to do that is actually this i'm gonna make a new convenience variable, called template bars that is going to be an object.
+
+01:46:16.000 --> 01:46:33.000
+So i'll establish a property of that template bars object that's named toddues.
+
+01:46:33.000 --> 01:46:40.000
+The value of that property is going to be the Tdoos data structure that we required in from up above.
+
+01:46:40.000 --> 01:46:51.000
+And so that to do data will become available inside the template.
+
+01:46:51.000 --> 01:47:07.000
+How by adding this template vars object the second parameter to the res render call So that's it.
+
+01:47:07.000 --> 01:47:11.000
+That's how you feed dynamic data down into a template.
+
+01:47:11.000 --> 01:47:40.000
+Okay, that means that when i'm over here inside my to do's template, I can do the following I can go open percent sign equals to dos, and then close this rather weird looking tag I call it an alligator
+
+01:47:40.000 --> 01:47:46.000
+clip just because of the way that the tag looks looks like an alligator.
+
+01:47:46.000 --> 01:47:51.000
+Excuse me that's eating some stuff this to do is that's a variable.
+
+01:47:51.000 --> 01:47:57.000
+Now it's a javascript variable sitting in some html.
+
+01:47:57.000 --> 01:48:06.000
+The html is otherwise static. right But Now, if I have this in place, and let's go back and restart the server.
+
+01:48:06.000 --> 01:48:28.000
+If I go to here Reload the homepage and now I have the to do's get request. I can click on that interesting brings me to to Dus and shows me those things.
+
+01:48:28.000 --> 01:48:37.000
+Now remember to do's was an array of objects and so this is what it has converted it into.
+
+01:48:37.000 --> 01:48:46.000
+If I look at this to do is is an array of objects. And so it has shown up like this in the template.
+
+01:48:46.000 --> 01:49:00.000
+Okay, we're almost there here. is How to make a loop inside and express, ejs Template.
+
+01:49:00.000 --> 01:49:08.000
+I can include a tag that looks like this notice there's no equal sign here.
+
+01:49:08.000 --> 01:49:30.000
+Instead. it's just with the percent Signs this means I get to start typing actual Javascript in here, for example, I could go Toddos dot for each.
+
+01:49:30.000 --> 01:49:40.000
+There'll be a call back in here, right for each item like this.
+
+01:49:40.000 --> 01:49:58.000
+So that's my javascript like so can close this Javascript, and open it again right each of these little outator clips contains some Javascript for me.
+
+01:49:58.000 --> 01:50:06.000
+Then when i'm not in javascript mode right then I can go back to Html.
+
+01:50:06.000 --> 01:50:17.000
+So let's add some html why don't we make a paragraph out of each one of these things inside the paragraph.
+
+01:50:17.000 --> 01:50:28.000
+I'm going to add an output alligator clip like that, where I output json dot string of Phi.
+
+01:50:28.000 --> 01:50:41.000
+Item like that. So I still have my debugging up above let's say so.
+
+01:50:41.000 --> 01:51:03.000
+Debugging is above here as an h 2 for now, and if I go here and hit reload. Now I have this new template syntax that I've brought in it shows that I can loop over the individual
+
+01:51:03.000 --> 01:51:07.000
+items and give a Json stringify of each of the particular items.
+
+01:51:07.000 --> 01:51:20.000
+That's pretty cool, because now, instead of going for a Json stringify, I can actually just do this item, Dot.
+
+01:51:20.000 --> 01:51:34.000
+And what is it? description like? so back here? reload and it shows me the descriptions inside my objects.
+
+01:51:34.000 --> 01:51:39.000
+I don't need this debugging anymore we'll get rid of that part, save it.
+
+01:51:39.000 --> 01:51:52.000
+But here, reload let's make this be list of to do items Voila!
+
+01:51:52.000 --> 01:52:08.000
+So here are some practical tips writing express web servers.
+
+01:52:08.000 --> 01:52:26.000
+Okay, this is all new for the moment i'd like to give you some ideas that are going to help because what we've just done can be quite confusing because you're jumping around between a lot of different files fear not there's
+
+01:52:26.000 --> 01:52:37.000
+a strategy to handle this situation. I often like to keep as much screen real estate as I can for Code right.
+
+01:52:37.000 --> 01:52:45.000
+That's getting rid of that thing on the side but either way it's pretty clear that we've got some front-end stuff going on.
+
+01:52:45.000 --> 01:52:49.000
+We've got some back-end stuff going on they've been split out into separate files.
+
+01:52:49.000 --> 01:52:54.000
+This is very clearly back-end logic when this code runs.
+
+01:52:54.000 --> 01:53:04.000
+This is the code that's responding to the request at first right? We're trying to figure out which line of code is going to correspond to the Web request.
+
+01:53:04.000 --> 01:53:13.000
+I would like to be able to see this and see the Todd's template at the same time.
+
+01:53:13.000 --> 01:53:17.000
+So i'm gonna right click this and say open to the side.
+
+01:53:17.000 --> 01:53:27.000
+Now I can see 2 files at once, so if I close that give me as much screen real estate as I can get.
+
+01:53:27.000 --> 01:53:48.000
+I've got my web server in one file here i've got the particular template that's going to respond to a particular request right over here and then I can flip back and forth, between that and my
+
+01:53:48.000 --> 01:54:05.000
+browser like this so here's the browser that's the front end here's my editor I'm currently editing files that are going to live on the back end I can flow through this text editor
+
+01:54:05.000 --> 01:54:24.000
+file open to see you, know what's the logic of receiving in the inputs from the request I could rattle my way down this file until I find, for example, the get request for to do like So and I can see oh, my
+
+01:54:24.000 --> 01:54:34.000
+get request for to dos makes some template variables passes them into a template called Toddos And's.
+
+01:54:34.000 --> 01:54:47.000
+Over here. So the to do items says Oh, yeah I see there's a variable called to do that i'm gonna do some javascript on over here. what was that defined as again.
+
+01:54:47.000 --> 01:54:50.000
+Oh, yeah, it's back here. I can see that it's defined as to do.
+
+01:54:50.000 --> 01:55:02.000
+I might have some quite complex logic in here. Actually I might be setting up 6 variables, get rendered within a given template, can scan my eyes to the left.
+
+01:55:02.000 --> 01:55:15.000
+Look at how that's being done quickly, scan my eyes to the right. Oh, yeah, I've got this variable or that variable that I can use in my template right for example.
+
+01:55:15.000 --> 01:55:23.000
+What if I had first name because of a login script?
+
+01:55:23.000 --> 01:55:34.000
+Say like that. So there now I have a first name variable set within my template bars and handed to my Tedus list.
+
+01:55:34.000 --> 01:55:55.000
+I can write now over here in a paragraph tag say welcome, and then, because it's an ejs template an alligator clip it's an output style one like that and i'm gonna write
+
+01:55:55.000 --> 01:56:14.000
+first name we'll like that so we'll go back here, restart the server reload my to do, and now it shows the first name right directly on the template.
+
+01:56:14.000 --> 01:56:21.000
+You can see how that was done here. Right, I added a new property to this template.
+
+01:56:21.000 --> 01:56:33.000
+Bars. Template bars was always being handed into the template. but this becomes the variable on this side like that public.
+
+01:56:33.000 --> 01:56:43.000
+Go ahead. Thank you. I just had a quick question so your path the to Do's list using the template Fars. Is that just common convention?
+
+01:56:43.000 --> 01:56:47.000
+Can't you just pass it straight in I guess that wouldn't be allowed
+
+01:56:47.000 --> 01:56:57.000
+Are you suggesting that I do something like this yeah and Then like if you didn't have template bars?
+
+01:56:57.000 --> 01:57:05.000
+Would that still work, or is this just better way of doing it Well, there's there's kind of 2 things about what you've just suggested.
+
+01:57:05.000 --> 01:57:18.000
+This second parameter is meant to be an object, The ejs template is going to interpret the properties of that object as variables on this side.
+
+01:57:18.000 --> 01:57:36.000
+So at the very least, I would need to do this to get to dos in there, because the property name turns into a variable name on the other side.
+
+01:57:36.000 --> 01:57:48.000
+If I pass to dos in directly, I would end up with some weird properties like type and description, and those would be the variables, because those are the properties of the objects, or something.
+
+01:57:48.000 --> 01:57:58.000
+Right. Now, the other thing that you could do, which is a little different from a coding point of view.
+
+01:57:58.000 --> 01:58:05.000
+Right. I could do this instead of making the template.
+
+01:58:05.000 --> 01:58:24.000
+Vars convenience variable. I could just put it in as a literal, but it is expecting this to be an object here whose properties become variable names. Okay, cool.
+
+01:58:24.000 --> 01:58:39.000
+You does that work all right. So we'll leave it as that at that I do want to talk about one last thing.
+
+01:58:39.000 --> 01:58:43.000
+Vince asks the alligator. clips is specific to ejs templates.
+
+01:58:43.000 --> 01:58:49.000
+It certainly is specific to Eegs templates. You will find similar syntax in other template engines.
+
+01:58:49.000 --> 01:59:13.000
+One last thing about express, and I want to make reference to our diagram that holds all of the boot camp in one slide back here.
+
+01:59:13.000 --> 01:59:22.000
+So this wheel that shows how the server does its thing.
+
+01:59:22.000 --> 01:59:33.000
+This is specific to express this strategy is gonna happen for many types of back-end stack middleware.
+
+01:59:33.000 --> 01:59:41.000
+It is the last thing I want to talk about remember the request comes in.
+
+01:59:41.000 --> 01:59:44.000
+It's got a http verb in a path.
+
+01:59:44.000 --> 02:00:10.000
+We've shown how to make a back-end route that is a callback that's going to be specific to a given route, right specific to a given path, and often, though, I would like a certain amount of code to run
+
+02:00:10.000 --> 02:00:29.000
+for every request, so i'd like to show you an example of the kind of thing that you might do in that case, and show that it's middleware, that you can use to run on any given request to run on all the requests
+
+02:00:29.000 --> 02:00:59.000
+actually So going back to the code, I want to introduce you to a package called Morgan, and the way that it works is, or what is for is as a system of middleware middleware is built into express We're going to
+
+02:01:00.000 --> 02:01:07.000
+run some Morgan middleware. we're gonna do this before the routes section.
+
+02:01:07.000 --> 02:01:24.000
+So this is our Routes here. we're going to run Middleware, and let's have a look at Morgan how it holds together.
+
+02:01:24.000 --> 02:01:36.000
+Npm. Oregon package with Morgan.
+
+02:01:36.000 --> 02:01:58.000
+So you bring it in from a require. And then, to use Morgan with express, we need to run a function like this one Morgan Tiny.
+
+02:01:58.000 --> 02:02:02.000
+These are formats. By the way, Morgan will console.
+
+02:02:02.000 --> 02:02:10.000
+Log your routes for you. They come in right. you may have noticed that on our server we're not doing any console logging.
+
+02:02:10.000 --> 02:02:15.000
+That shows the requests that shows us any debugging information at all.
+
+02:02:15.000 --> 02:02:35.000
+If I want to use moregan express middleware then we're going to need a code snippet that does precisely this.
+
+02:02:35.000 --> 02:03:03.000
+And so for that Npm. install morgan like So we'll throw that in as a dependency as well into our package.
+
+02:03:03.000 --> 02:03:16.000
+Js. and let me just find a code snippet so that I can use this in particular.
+
+02:03:16.000 --> 02:03:38.000
+We'll go out 2 here correct morgan from from one of these files.
+
+02:03:38.000 --> 02:03:49.000
+Let's go for da day. the star dot js you should find one.
+
+02:03:49.000 --> 02:04:19.000
+There we go app dot use Morgan Dev. So back here for Middleware app dot use Morgan Dev, and you saw on the the Morgan home page where you can put different strings in here to get different Formats So with that
+
+02:04:28.000 --> 02:04:44.000
+done that way. App dot use this function is going to get called for all the routes, and so let's restart the server back here.
+
+02:04:44.000 --> 02:04:54.000
+Node server express, listening on port 3,002 back to the page itself.
+
+02:04:54.000 --> 02:04:59.000
+Here I go to the homepage, for example. hit enter.
+
+02:04:59.000 --> 02:05:12.000
+I get my home page let's go back to the terminal, and it showed us the exact route that got hit with a bit of debugging info for us.
+
+02:05:12.000 --> 02:05:23.000
+We're getting the http ver we're getting the path. We're getting a status code not 200 this time.
+
+02:05:23.000 --> 02:05:27.000
+This time it was 304 and if you look that up on the cats.
+
+02:05:27.000 --> 02:05:37.000
+You'll see that that was cashed because it had loaded the thing already right.
+
+02:05:37.000 --> 02:05:42.000
+We also get how many milliseconds it took to assemble the page.
+
+02:05:42.000 --> 02:05:50.000
+So that's super useful from the point of view of you Know optimizing your code, seeing what your user experience is like.
+
+02:05:50.000 --> 02:05:56.000
+This is the server, knowing how long it took to assemble the page itself. Right?
+
+02:05:56.000 --> 02:06:16.000
+So what middleware is to get to kelsey's question. Middleware is code on the server that runs for all of your routes. No matter which route I go, for it's gonna run this the routes themselves.
+
+02:06:16.000 --> 02:06:27.000
+Only run if a particular kind of request is made, this is the get request to the homepage.
+
+02:06:27.000 --> 02:06:33.000
+This is the get request to slash deduce only one or the other is going to run in particular.
+
+02:06:33.000 --> 02:06:41.000
+It's the first one of these that matches that's Why, we put the wild card one at the end.
+
+02:06:41.000 --> 02:07:09.000
+Okay. Thank you very much for your time. and attention this diagram is the one that I'd start to like burning into your mind, so that you can separate each of the new bits of information that you learn in the boot camp and
+
+02:07:09.000 --> 02:07:17.000
+put them somewhere on this wheel right? Every new piece of information that you learn is gonna go somewhere on this diagram.
+
+02:07:17.000 --> 02:07:33.000
+For example, I can show the entirety of the boot camp all in one slide.
+
+02:07:33.000 --> 02:07:46.000
+This is still kind of beta mode version of this infographic. I'm gonna make it include the same wheels that we saw just a moment ago and make it clickable and all sorts of things like that But i'll just show
+
+02:07:46.000 --> 02:08:02.000
+you give you a bit of an idea of where we're headed with this all of boot camp in one slide I'm going to be populating this diagram with more and more acronyms, so that you know when
+
+02:08:02.000 --> 02:08:07.000
+you react week, you'll see that Yeah, this is getting inputs from the previous step, and so on. Vince.
+
+02:08:07.000 --> 02:08:16.000
+Go ahead. is the egs template one That is is that the one we should be using is that It's just an example you're using.
+
+02:08:16.000 --> 02:08:22.000
+Is that like A. Is that a standard? Is that the most popular like kind of Can you comment on that?
+
+02:08:22.000 --> 02:08:28.000
+Yeah. interesting question. you you you're thinking about potentially using different templates.
+
+02:08:28.000 --> 02:08:34.000
+For your servers. Another one, for example, would be handle bars is another popular template engine.
+
+02:08:34.000 --> 02:08:43.000
+You mean like that yeah I don't know about any others i'm just curious to know is egs the one we should and will be using for learning purposes.
+
+02:08:43.000 --> 02:08:52.000
+Or yes, example. Okay, yeah, no. So any of the learning that you did today is going to be directly applicable to this week's tiny app, for example.
+
+02:08:52.000 --> 02:09:08.000
+And yes, you should and we'll be using it that's not to say that it's not good to be aware that there are many, many others there, right because then you'd know how to go after using them, but this is a great place to
+
+02:09:08.000 --> 02:09:23.000
+start, and it is an industry standard certainly to a certain extent in fact, it's so much a standard that there is a template engine called Pug, that's built into express that we're not using so there's that as
+
+02:09:23.000 --> 02:09:29.000
+Well, yeah. but that's it that brings us in for a landing.
+
+02:09:29.000 --> 02:09:43.000
+You've seen web servers you've seen express you've seen middleware. that's about it click like, and subscribe. Hold my beer and watch this see you some time in another lecture. Feel free to submit some
+
+02:09:43.000 --> 02:10:03.000
+feedback on how it went i'm always ready to improve how the lectures go very much appreciated time and attention. sharing your cameras.
+
