@@ -7,7 +7,7 @@ const randomDelay = () => Math.floor(Math.random() * 5000);
 
 const promiseOne = returnPromise('one', randomDelay());
 const promiseTwo = returnPromise('two', randomDelay());
-const promiseThree = returnRejectedPromise('three', 20);
+const promiseThree = returnPromise('three', randomDelay());
 
 const promises = [promiseOne,  promiseTwo, promiseThree];
 

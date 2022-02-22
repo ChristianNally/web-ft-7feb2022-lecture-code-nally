@@ -47,11 +47,10 @@ rlp.questionAsync('What do you think of Node.js? ')
     const node = answers[0];
     const name = answers[1];
     const activity = answers[2];
-    const actualActivity = answers[3];
-    const music = answers[4];
-    const meal = answers[5];
-    const food = answers[6];
-    const sport = answers[7];
+    const music = answers[3];
+    const meal = answers[4];
+    const food = answers[5];
+    const sport = answers[6];
     console.log();
     console.log('Your profile is ready!!');
     console.log(`My name is ${name} and I really like ${activity}! I listen to ${music} while eating ${food} during ${meal} and playing ${sport}... and I think Node is ${node}!!`);

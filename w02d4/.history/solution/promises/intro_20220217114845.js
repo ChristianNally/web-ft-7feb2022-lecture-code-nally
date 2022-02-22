@@ -1,7 +1,7 @@
 const promiseGenerator = require('./promise-generator');
 const returnPromise = promiseGenerator.returnPromise;
 
-const promise = returnPromise('first promise', 1444);
+const promise = returnPromise('first promise', 4444);
 
 
 console.log('pending promise:',promise);

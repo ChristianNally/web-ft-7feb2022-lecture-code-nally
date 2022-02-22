@@ -9,6 +9,7 @@ returnRejectedPromise('one',1000)
   .catch((err) => {
     // throw err;
     console.log('different err:',err);
+    return returnPromise('two',1000);
   })
   .then((data) => {
     console.log('data',data);

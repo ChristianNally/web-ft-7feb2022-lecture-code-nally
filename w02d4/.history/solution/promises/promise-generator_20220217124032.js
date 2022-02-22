@@ -46,9 +46,10 @@ const myReturnRandomPromise = (value, delay = 1000) => {
   return myPromise;
 };
 
+
+
 module.exports = {
   returnPromise,
   returnRejectedPromise,
-  returnRandomPromise,
-  myReturnRandomPromise
+  returnRandomPromise
 }

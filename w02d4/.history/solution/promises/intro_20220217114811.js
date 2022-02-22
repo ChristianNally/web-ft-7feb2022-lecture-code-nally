@@ -1,7 +1,7 @@
 const promiseGenerator = require('./promise-generator');
 const returnPromise = promiseGenerator.returnPromise;
 
-const promise = returnPromise('first promise', 1444);
+const promise = returnPromise('first promise', 4444);
 
 
 console.log('pending promise:',promise);
@@ -17,6 +17,8 @@ console.log('pending promise:',promise);
 
 promise
   .then((data) => {
+    // const newData = 'another thing';
+    // console.log("newData:",newData);
     console.log('data:', data);
   }); // <--- that is just a function call. no magic there!
 //   .then(() => {
