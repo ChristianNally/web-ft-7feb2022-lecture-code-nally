@@ -55,6 +55,13 @@
   | POST | /resources | Create a new resource (Add) |
   | POST | /resources/:id/delete | Delete an existing resource (Delete) |
 
+  | GET | /photos | Retrieve all of a resource (Browse) |
+  | GET | /photos/:id | Retrieve a particular resource (Read) |
+  | POST | /photos/:id | Update a resource (Edit) |
+  | POST | /photos | Create a new resource (Add) |
+  | POST | /photos/:id/delete | Delete an existing resource (Delete) |
+
+
 * RESTful API's have some advantages:
   * If I know that your API is RESTful, then I can easily guess at what endpoints you have defined and I don't need to read your documentation to figure it out
   * Results in clean URLs (ie. `/resource` instead of `/get-my-resource`)

@@ -1,9 +1,10 @@
 const express = require('express');
 const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 
 const bcrypt = require('bcrypt');
-// const methodOverride = require('method-override');
+const methodOverride = require('method-override');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -11,25 +12,22 @@ const port = process.env.PORT || 8080;
 
 // // middleware
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.static('public'));
-
-// app.use(cookieSession({
-//   name: 'cookiemonster',
-//   keys: ['my secret key', 'yet another secret key']
-// }));
+app.use(cookieSession({
+  name: 'cookiemonster',
+  keys: ['my secret key', 'yet another secret key']
+}));
 
 // This snippet allows your HTML <form> tags to fake other verbs.
-// app.use(methodOverride('_method'));
-// app.use((req, res, next) => {
-//   if (req.query._method) {
-//     req.method = req.query._method;
-//     next();
-//   }
-// });
-
-
+app.use(methodOverride('_method'));
+app.use((req, res, next) => {
+  if (req.query._method) {
+    req.method = req.query._method;
+    next();
+  }
+});
 
 
 // user database
@@ -55,8 +53,8 @@ app.get('/register', (req, res) => {
 });
 
 app.get('/protected', (req, res) => {
-  const username = req.cookies.username;
-  // const username = req.session.username;
+  // const username = req.cookies.username;
+  const username = req.session.username;
 
   if (!username) {
     return res.redirect('/login');
@@ -68,7 +66,8 @@ app.get('/protected', (req, res) => {
   }
 
   console.log('users:',users);
-  res.render('protected', { user });
+  const templateVars = { user };
+  res.render('protected', templateVars);
 });
 
 // app.get('*', (req, res) => {
@@ -89,8 +88,8 @@ app.post('/login', (req, res) => {
   bcrypt.compare(password, user.password)
     .then((result) => {
       if (result) {
-        res.cookie('username', user.username);
-        // req.session.username = user.username;
+        // res.cookie('username', user.username);
+        req.session.username = user.username;
         res.redirect('/protected');
       } else {
         return res.status(401).send('Password incorrect');
@@ -117,9 +116,9 @@ app.post('/register', (req, res) => {
     });
 });
 
-app.post('/logout', (req, res) => {
-  res.clearCookie('username');
-  // req.session = null;
+app.delete('/logout', (req, res) => {
+  // res.clearCookie('username');
+  req.session = null;
   res.redirect('/login');
 });
 
