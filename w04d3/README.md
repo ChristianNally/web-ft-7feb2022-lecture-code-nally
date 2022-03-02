@@ -35,6 +35,13 @@
 - It requires js and XMLHTTPRequest support
 - History is not automatically updated
 
+## Consider the following APIs
+
+https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis/
+and many other Google Searches
+https://www.google.com/search?q=searchable+list+of+APIs+without+key
+
+
 ## Browser History
 
 Using AJAX you lose:
