@@ -15,7 +15,7 @@ $(document).ready(function(){
     event.preventDefault();
     $.ajax({
       url: 'https://api.apify.com/v2/key-value-stores/fabbocwKrtxSDf96h/records/LATEST?disableRedirect=true',
-      method: "GET" // could be PUT, PATCH, DELETE, ...
+      method: "GET"
     })
     .then(function(data){
       console.log('data', data);

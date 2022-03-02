@@ -5,7 +5,7 @@ $(document).ready(function(){
     let returnValue = '';
     returnValue += '<table style="border: 1px solid black">';
     for (let region of data.infectedByRegion){
-      returnValue += `<tr><td style="border: 1px solid black">${region.region}</td><td>${region.infectedCount}</td></tr>`;
+      returnValue += `<tr><tdstyle="border: 1px solid black">${region.region}</td><td>${region.infectedCount}</td></tr>`;
     }
     returnValue += '</table>';
     return returnValue;
@@ -15,14 +15,12 @@ $(document).ready(function(){
     event.preventDefault();
     $.ajax({
       url: 'https://api.apify.com/v2/key-value-stores/fabbocwKrtxSDf96h/records/LATEST?disableRedirect=true',
-      method: "GET" // could be PUT, PATCH, DELETE, ...
+      method: "GET"
     })
     .then(function(data){
       console.log('data', data);
       const elements = convertToHTML(data);
       $('#display').html(elements);
-      const $newDOMElement = $("<h4>Monkey Fuzz!!</h4>");
-     $('#footer').children().append($newDOMElement);
     })
     .catch(function(error){
       console.log(`Error: ${error}`);

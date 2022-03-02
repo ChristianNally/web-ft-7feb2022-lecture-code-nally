@@ -15,14 +15,14 @@ $(document).ready(function(){
     event.preventDefault();
     $.ajax({
       url: 'https://api.apify.com/v2/key-value-stores/fabbocwKrtxSDf96h/records/LATEST?disableRedirect=true',
-      method: "GET" // could be PUT, PATCH, DELETE, ...
+      method: "GET"
     })
     .then(function(data){
       console.log('data', data);
       const elements = convertToHTML(data);
       $('#display').html(elements);
-      const $newDOMElement = $("<h4>Monkey Fuzz!!</h4>");
-     $('#footer').children().append($newDOMElement);
+      const $newDOMElement = $("<h4></h4>");
+
     })
     .catch(function(error){
       console.log(`Error: ${error}`);
