@@ -1,0 +1,1952 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:27.000
+A and recording welcome week. 4 day 3 front end here's the context. the all in one slide that I keep coming back to this one flushed out for the entire boot camp this time.
+
+00:00:27.000 --> 00:00:40.000
+Remember this is the between clicks from one click to the next click of any web app right in particular, a traditional multi-page web app it's captured by this slide.
+
+00:00:40.000 --> 00:00:52.000
+So, for example, the on ramp is here at the 12 o'clock, part of the diagram right that's a web request the web request hits the back end.
+
+00:00:52.000 --> 00:00:57.000
+The web server where a variety of things can happen.
+
+00:00:57.000 --> 00:01:05.000
+In fact, a traditional web server just grabs a file an html file and sends that back as the response right?
+
+00:01:05.000 --> 00:01:13.000
+But, however, the response is built, that response is going to come in the form of Html and Css.
+
+00:01:13.000 --> 00:01:19.000
+And javascript, and so that's a lot about front end, which you've been learning this week.
+
+00:01:19.000 --> 00:01:20.000
+Here we are right in the middle of all of that, in fact.
+
+00:01:20.000 --> 00:01:35.000
+So as the response comes back the browser right the web client, he's gonna take that html do out do some layout and styling of it it's going to render the html page with those
+
+00:01:35.000 --> 00:01:43.000
+styles applied. then client-side javascript will start up.
+
+00:01:43.000 --> 00:01:57.000
+And so you've learned a bit about that finally on this wheel of what happens between clicks in order to get the next web request.
+
+00:01:57.000 --> 00:02:10.000
+One of 2 things will happen. One is that the user would click on a link which goes to another route or another file on your web server, and the whole thing would start again.
+
+00:02:10.000 --> 00:02:16.000
+Right. But there's one more possibility and That's the possibility that we're going to talk about today.
+
+00:02:16.000 --> 00:02:34.000
+Ajax, where the front end itself has some front-end Javascript that's gonna run where that Javascript is in and of itself acting like a little miniature web browser built into the
+
+00:02:34.000 --> 00:02:42.000
+language. we'll see how that all holds together in just a minute.
+
+00:02:42.000 --> 00:02:52.000
+So here are some slides today's agenda what is Ajax.
+
+00:02:52.000 --> 00:03:05.000
+We'll do a demo and we'll do pros and cons of Ajax, and we'll talk a little bit at the end about cross-origin resource sharing which is a security scheme to be considered
+
+00:03:05.000 --> 00:03:15.000
+when you're using ajax you may see errors that reference that cores acronym, and we'll talk about that in some detail a little later.
+
+00:03:15.000 --> 00:03:41.000
+So first up. What is Ajax and it's heavily implicated the single page app model of web apps right Tiny app, for example, was very much a multi-page app when you clicked a link it went to a new
+
+00:03:41.000 --> 00:03:55.000
+route everybody down with that good and so you've got a web browser that makes a request to a web server gets its html, and that's the loop that's happening with a multi-page app
+
+00:03:55.000 --> 00:04:08.000
+This, on the other hand, is a diagram of a single page app where the app loads in and runs a bunch of front-end.
+
+00:04:08.000 --> 00:04:13.000
+Javascript. So within that front-end Javascript.
+
+00:04:13.000 --> 00:04:28.000
+When the user takes an action that makes it need more data, it can actually reach out to the web server and just grab the data and nothing else, right?
+
+00:04:28.000 --> 00:04:35.000
+And so that request is called an ajax request it's made to the server.
+
+00:04:35.000 --> 00:04:42.000
+The server returns data often in the form of json as a format.
+
+00:04:42.000 --> 00:04:46.000
+It's a text format for data that's what Json is.
+
+00:04:46.000 --> 00:04:52.000
+And so Front-end Javascript will accept that data in that form.
+
+00:04:52.000 --> 00:05:00.000
+Then render new dom elements, or edit the way that Dom elements are rendered on the page.
+
+00:05:00.000 --> 00:05:17.000
+The front end. Javascript modifies the page that the person is looking at directly rather than refreshing the page the elephant in the room at the moment is this database?
+
+00:05:17.000 --> 00:05:33.000
+This is something that we will talk about next week, where the web server might go to a database to get persistent storage of data out, and then combine it with the response.
+
+00:05:33.000 --> 00:05:46.000
+But again, that would be left to next week. any questions, about What you See here, of course we're gonna do more examples and more talking about the details.
+
+00:05:46.000 --> 00:05:53.000
+But that's the broad thing Pablo go ahead. so tiny app refreshes the page right? Yep!
+
+00:05:53.000 --> 00:06:00.000
+How does the browser update? the dom without refreshing You'll see today?
+
+00:06:00.000 --> 00:06:02.000
+Okay, cool. i'm not gonna do that we're gonna do precisely.
+
+00:06:02.000 --> 00:06:06.000
+That is a bit mysterious, though isn't it it's a little weird right.
+
+00:06:06.000 --> 00:06:11.000
+And and this is the thing like you know when i'm teaching front-end Javascript.
+
+00:06:11.000 --> 00:06:20.000
+Make it very clear that Front-end Javascript can completely mess with the browser experience that the user sees right can utterly mess with it.
+
+00:06:20.000 --> 00:06:33.000
+Right. For example, you could make some front-end Javascript that would, when you put it on any given page included in the Html reference to that Javascript.
+
+00:06:33.000 --> 00:06:44.000
+So that it would run to you could make it so that every time you clicked on a link the javascript would interrupt what was gonna happen.
+
+00:06:44.000 --> 00:06:52.000
+Take the link, animate it and let make it spin and fly away like a asteroid that got hit in an explosion.
+
+00:06:52.000 --> 00:06:58.000
+Okay. The link would not, in fact, go out and fetch a new page and re-render it instead.
+
+00:06:58.000 --> 00:07:06.000
+It would do this little twirly trick where the thing goes, flying away right completely mess with how the browser works right.
+
+00:07:06.000 --> 00:07:09.000
+You could do that with front end javascript front that's what front.
+
+00:07:09.000 --> 00:07:14.000
+And Javascript is for is the completely mess with the user experience.
+
+00:07:14.000 --> 00:07:18.000
+And what the browser is doing. yeah and we'll actually see some of that.
+
+00:07:18.000 --> 00:07:23.000
+Not that precise thought experiment, although it would be fun to write it right? Okay.
+
+00:07:23.000 --> 00:07:28.000
+So what is Ajax? Then in a multi-page?
+
+00:07:28.000 --> 00:07:46.000
+App. Now we're again Remember, tiny app you would have forms and in the forms there would be attributes on the form tags method, equal post and action equals, say, register for the registration form.
+
+00:07:46.000 --> 00:07:55.000
+When you submit that form, it creates a new post request which goes to your server.
+
+00:07:55.000 --> 00:08:15.000
+When that postgres post request is fulfilled by the server, and a response is created, That response goes back to the browser, and it renders new html The point is that it refreshes the page
+
+00:08:15.000 --> 00:08:32.000
+completely when that response comes back. Ajax, on the other hand, is a technique allowing the user interface to update itself without reloading the whole document. right?
+
+00:08:32.000 --> 00:08:41.000
+So give credit where credit was due. It was put together by Microsoft in 2,005 ish or so in 2,006.
+
+00:08:41.000 --> 00:08:52.000
+They published it as a specification, as a new function in Javascript in the browser.
+
+00:08:52.000 --> 00:09:00.000
+So that function, when you call it called Xml http.
+
+00:09:00.000 --> 00:09:07.000
+Request. that function call in and of itself is like a little miniature web.
+
+00:09:07.000 --> 00:09:22.000
+Browser built right into the language. So xml http request it's an object it's used to retrieve data asynchronously.
+
+00:09:22.000 --> 00:09:30.000
+Now I remember, when I was first learning this stuff, I had a hard time with asynchronous coding.
+
+00:09:30.000 --> 00:09:35.000
+It took me a long time to figure out what the heck that meant, and how it worked right.
+
+00:09:35.000 --> 00:09:42.000
+But because of the way that you guys have been taught in particular the order in which you have been taught things.
+
+00:09:42.000 --> 00:09:51.000
+You guys, more or less get what that means. Now it can take some time to really on board that knowledge, you know, about asynchronous coding, or whatever.
+
+00:09:51.000 --> 00:10:01.000
+But to the extent that you understand asynchronous coding, and the event loop at the main thread finishing, and then the event loop starting all that stuff.
+
+00:10:01.000 --> 00:10:08.000
+You understand how Ajax calls work right your browser is going to invoke this function?
+
+00:10:08.000 --> 00:10:25.000
+It's gonna go out onto the event loop it'll run asynchronously, and whenever it finishes doing its thing a callback will be called that contains the data that came back from that call so back in the old
+
+00:10:25.000 --> 00:10:33.000
+days. That function call likely, returned Xml data instead of Json.
+
+00:10:33.000 --> 00:10:36.000
+Xml is just a data format. Go ahead, papa.
+
+00:10:36.000 --> 00:10:52.000
+This might be more of a side track but so when I was little we had dial up and stuff right, and I assume at that age this Xml stuff didn't exist before 2,005 that's true so like how did websites
+
+00:10:52.000 --> 00:10:59.000
+work. I remember clicking, and it would show things, and like, you know, it was still doing things asynchronously as asynchronously.
+
+00:10:59.000 --> 00:11:03.000
+So? was it the other way? Well, or was that whole like leg stuff?
+
+00:11:03.000 --> 00:11:09.000
+What was basically the asing portion the lag was not to do with like.
+
+00:11:09.000 --> 00:11:18.000
+If your browser did not support Javascript, then Javascript was not doing anything asynchronously right.
+
+00:11:18.000 --> 00:11:21.000
+There were event loops, but they were written in other languages.
+
+00:11:21.000 --> 00:11:29.000
+Oh, I see the delay that you're the delay that you're most likely experiencing was because of the load time.
+
+00:11:29.000 --> 00:11:34.000
+The browser may actually sit there and block and wait right
+
+00:11:34.000 --> 00:11:41.000
+So. In fact, if you think about it, your whole user interface on your desktop is event driven right.
+
+00:11:41.000 --> 00:11:44.000
+There's an event loop that runs where you can run parallel things right.
+
+00:11:44.000 --> 00:11:49.000
+It's just that javascript allowed all of that to come into the browser.
+
+00:11:49.000 --> 00:11:54.000
+It allowed people to write code asynchronously for the browser.
+
+00:11:54.000 --> 00:12:03.000
+Yeah, Thanks for the question. it's a good one for context ask me again in the future. if you've got more questions about that.
+
+00:12:03.000 --> 00:12:14.000
+Yeah. okay. now, in ajax or with ajax with browser based javascript front-end javascript we're talking about now, right?
+
+00:12:14.000 --> 00:12:17.000
+This is an example of some code that you might see back.
+
+00:12:17.000 --> 00:12:25.000
+We will write code just like this today. Okay, this is, in fact, a bit of J Query: right? The dead giveaway.
+
+00:12:25.000 --> 00:12:29.000
+There is the dollar sign here, you're calling a dollar sign function getting a bit of J.
+
+00:12:29.000 --> 00:12:33.000
+Query you've got a selector Css selector being passed into the J.
+
+00:12:33.000 --> 00:12:40.000
+Query function, and on a submit event, then this callback gets called.
+
+00:12:40.000 --> 00:12:49.000
+Yeah. So down inside that callback where the asynchronous stuff is going to happen right?
+
+00:12:49.000 --> 00:12:57.000
+This callback is going to get called when the form gets submitted. You've got 2 key lines of code.
+
+00:12:57.000 --> 00:13:03.000
+One is event prevent default, followed by the Xml.
+
+00:13:03.000 --> 00:13:17.000
+Htv. request call the ajax call itself this first line. he's kind of mysterious and interesting what it does.
+
+00:13:17.000 --> 00:13:24.000
+Is, it stops the browser in its tracks from doing what it would have done.
+
+00:13:24.000 --> 00:13:40.000
+As a result of that event, right When you submit a form, the browser wants to create a new http request, send it to the server at a particular path to action.
+
+00:13:40.000 --> 00:13:45.000
+Get New html and re-render the page right.
+
+00:13:45.000 --> 00:13:51.000
+But this line is gonna stop that from happening. it says don't worry Browser.
+
+00:13:51.000 --> 00:13:55.000
+I got this hope that it's to hold my beer and watch this line of code right?
+
+00:13:55.000 --> 00:14:04.000
+So look for that event, prevent default. Every line in your callback.
+
+00:14:04.000 --> 00:14:14.000
+After. that is what you choose to write to do something else instead of what the browser was gonna do.
+
+00:14:14.000 --> 00:14:35.000
+We are going to write our own demo here some syntax, but a code that shows you another slightly different way of making an Ajax call.
+
+00:14:35.000 --> 00:14:42.000
+This one is J. query based, which will also be doing today, playing around with Jake.
+
+00:14:42.000 --> 00:14:55.000
+Query. Jquery simplifies a bunch of syntax for us, and allows us to focus on the concepts rather than some ridiculous code. right.
+
+00:14:55.000 --> 00:15:09.000
+And so in ajax i'm sorry in jquery I've got the dollar sign object dot ajax to make my Ajax call it the parameter that gets passed in is a configuration
+
+00:15:09.000 --> 00:15:20.000
+parameter, where I pass in a Url that I want to try to connect to, and a method like an http verb, right, get posts, and so on.
+
+00:15:20.000 --> 00:15:34.000
+This is a promise like syntax. in fact, it is a promise, and you can use then on it as well done ends up being an alias.
+
+00:15:34.000 --> 00:15:44.000
+For how the promise gets used. fail is like catch and so on so we'll see this in action.
+
+00:15:44.000 --> 00:15:56.000
+But first let's talk about some pros and cons yeah now. Yes, you can.
+
+00:15:56.000 --> 00:16:02.000
+Pabloas can use Dot then, and Dot catch, and the answer is, yes, pros and cons of Ajax.
+
+00:16:02.000 --> 00:16:12.000
+The pros improved. user experience, especially around page refreshes.
+
+00:16:12.000 --> 00:16:23.000
+The true mastery of any craft is often hidden from the end user.
+
+00:16:23.000 --> 00:16:33.000
+You might go to a restaurant, get an amazing meal built by a super, experienced, award-winning chef.
+
+00:16:33.000 --> 00:16:47.000
+Professional type, you know, and they may be doing many things to the food in preparation for the food that you enjoy in ways that are incredibly profound.
+
+00:16:47.000 --> 00:16:55.000
+But you don't even know why you're liking it right it's just there, and it's part of the whole experience. right?
+
+00:16:55.000 --> 00:17:01.000
+Same thing goes with a good author. Right? good web developer.
+
+00:17:01.000 --> 00:17:13.000
+There is a craft to developing web pages, where, if you take care of a bunch of little details that most people are not even aware of is having a profound effect on them.
+
+00:17:13.000 --> 00:17:15.000
+It will also have a profound effect on me in that context.
+
+00:17:15.000 --> 00:17:28.000
+And so with Ajax requests you can click a link on a web page and get a response back super quick without the page flashing at you right?
+
+00:17:28.000 --> 00:17:39.000
+And that's might be a super subtle thing but maybe from today onward you'll start to notice this more right when that happens, and when it doesn't, and you're like darn I wish this was ajax instead of
+
+00:17:39.000 --> 00:17:54.000
+a multi-page app to have the data that you want in front of your face right away in under half a second, instead of taking 3 s with a an annoying flash of pixels, at you does make a big difference to
+
+00:17:54.000 --> 00:18:01.000
+user experience. It also reduces the amount of information that gets set back right when you send.
+
+00:18:01.000 --> 00:18:06.000
+When you request Ajax and you just get back Json data.
+
+00:18:06.000 --> 00:18:11.000
+Only the data you need that's a lot less network traffic right?
+
+00:18:11.000 --> 00:18:16.000
+You're just getting back some numbers some strings you know whatever exactly you needed.
+
+00:18:16.000 --> 00:18:31.000
+That can be especially important on mobile, where speeds may not be as fast as they would be, say on a wired land, or even a Wi-fi network, Right?
+
+00:18:31.000 --> 00:18:40.000
+Maybe you're paying for data right and you're trying to minimize your overall costs.
+
+00:18:40.000 --> 00:18:51.000
+Excuse me. Okay. Some cons to using Ajax creating dynamic content can be tricky.
+
+00:18:51.000 --> 00:19:11.000
+Excuse me. No, this is not rum it's water asynchronous programming patterns are more complex, right as you've seen some of the code that we saw so far, and learning the asynchronous code that you have learned up
+
+00:19:11.000 --> 00:19:17.000
+to now. Yeah, it's more complex than just writing say html, right?
+
+00:19:17.000 --> 00:19:24.000
+It requires javascript support that's kind of a given in modern browsers and web experiences now.
+
+00:19:24.000 --> 00:19:29.000
+But it requires Xml. Http. request, support.
+
+00:19:29.000 --> 00:19:36.000
+Again. all modern browsers have it. one last con that we will touch on later in the class.
+
+00:19:36.000 --> 00:19:43.000
+Think about the back buttons and the forward buttons like who uses the back button on their browser a lot.
+
+00:19:43.000 --> 00:19:49.000
+Still. Yeah, it's a thing right it's built into how we interact with the web right?
+
+00:19:49.000 --> 00:19:58.000
+When you click on another link in tiny app, and it goes to another page when you click the back button.
+
+00:19:58.000 --> 00:20:03.000
+You know what you want to go back to right it's automatic.
+
+00:20:03.000 --> 00:20:13.000
+Let's say instead, with an ajax Call having been made on your app, What does it even mean to go back right?
+
+00:20:13.000 --> 00:20:20.000
+You only had one page load to start with, and when you click a thing I mean, who knows?
+
+00:20:20.000 --> 00:20:26.000
+You could make that animation. I was talking about where the where the link flies away and it in it like it exploded, or something right?
+
+00:20:26.000 --> 00:20:32.000
+What happens when you click the back button. Then, yeah, Richard, go ahead.
+
+00:20:32.000 --> 00:20:41.000
+Yeah, speaking of like the history on the con, does it affect? does Ajax affect the cookies?
+
+00:20:41.000 --> 00:20:48.000
+Are the cache like when you load something on the single page?
+
+00:20:48.000 --> 00:21:08.000
+Does an Ajax request include cookies? Probably I think it has to, because when the web server receives that request, it needs to be able to check cookie values.
+
+00:21:08.000 --> 00:21:12.000
+But when you say affects the cookie values, what do you mean by that?
+
+00:21:12.000 --> 00:21:24.000
+Like what I had in my was like, I guess, changing the cookie value or like, like, or like setting it.
+
+00:21:24.000 --> 00:21:34.000
+Yeah, I think you know, this is such an interesting question. It must, in order to be able to handle things like, Are you logged in or not?
+
+00:21:34.000 --> 00:21:44.000
+Right like you need to be a a web. server who's responding to an Ajax request needs to decide whether the person is logged in or not, So i'm gonna say yes, cookies are included in
+
+00:21:44.000 --> 00:21:55.000
+ajax requests the history that's that's the key question.
+
+00:21:55.000 --> 00:22:06.000
+There is a con here where, if you're doing ajax requests you must manage your own browser history as well.
+
+00:22:06.000 --> 00:22:22.000
+It becomes a thing that you must start to manage. You have to choose whether or not the Ajax request counts as a thing for back and forward in the back, and forward buttons right, because some Ajax requests should not add a new
+
+00:22:22.000 --> 00:22:29.000
+page onto the history stack, and some Ajax requests do that should be included.
+
+00:22:29.000 --> 00:22:36.000
+Some should, some should not. Okay, Yeah, thank you for the question.
+
+00:22:36.000 --> 00:22:57.000
+I hope that answered. We'll get back to it more a bit, and then those are like the last 2 slides for here to So at this stage let's just have a look at a bit of code.
+
+00:22:57.000 --> 00:23:19.000
+So I had originally cast this lecture with its own complete back-end, node express server right, but it turns out that was completely unnecessary.
+
+00:23:19.000 --> 00:23:26.000
+And so this time. i'm skipping it. We don't even need to talk about any of that.
+
+00:23:26.000 --> 00:23:29.000
+We're going to get right straight to the goods about Ajax requests.
+
+00:23:29.000 --> 00:23:39.000
+Okay, here is some Html and I want to just talk about the pieces of the html that are in here.
+
+00:23:39.000 --> 00:23:46.000
+We've got an html tag we've got a head tag inside the head tag.
+
+00:23:46.000 --> 00:23:53.000
+We have a title right, which shows whatever I want to go there.
+
+00:23:53.000 --> 00:24:01.000
+There is a script tag here which brings in for us.
+
+00:24:01.000 --> 00:24:10.000
+J: Query: Yeah, I people have seen this they're comfortable with this being done in a certain way.
+
+00:24:10.000 --> 00:24:14.000
+Yeah. Okay, So this html page is going to bring in.
+
+00:24:14.000 --> 00:24:34.000
+J. query additionally, we're going. to bring in another script which is our own custom, front-end javascript. That script is going to run some J.
+
+00:24:34.000 --> 00:24:42.000
+Query code. it's gonna run some javascript code that we write caught, which calls the jquery function and does our bidding.
+
+00:24:42.000 --> 00:24:46.000
+Does our customizations of what is going to happen on the front end.
+
+00:24:46.000 --> 00:25:06.000
+Beyond that we've got some html That's designed to do one thing, and that is trigger an Ajax request.
+
+00:25:06.000 --> 00:25:18.000
+It's just a form. Yeah, but as it stands let's have a look at how this form is configured.
+
+00:25:18.000 --> 00:25:24.000
+Okay, there's a form tag it's got 2 attributes.
+
+00:25:24.000 --> 00:25:32.000
+The attributes are set to an action and a method right.
+
+00:25:32.000 --> 00:25:38.000
+The action is the path that it's going to go to for this form to be submitted.
+
+00:25:38.000 --> 00:25:45.000
+The method is the http verb that it's going to use when it hits that request inside that form.
+
+00:25:45.000 --> 00:25:53.000
+We've got an input tag with a type and a name the name is Time Getter.
+
+00:25:53.000 --> 00:26:07.000
+The value is get data, and then finally, after the form tag we have a div that's got an Id on it called display.
+
+00:26:07.000 --> 00:26:21.000
+It's an empty tag there's no content in it. The only thing is is that it's a placeholder in the Html that later on we can insert new Html into based on the results of the stuff
+
+00:26:21.000 --> 00:26:23.000
+that comes back as part of the Ajax requests.
+
+00:26:23.000 --> 00:26:49.000
+Okay, very good. So how about we dig into this a little bit more, bye showing the page here.
+
+00:26:49.000 --> 00:26:53.000
+It is here. If I hit reload on that that's what I get.
+
+00:26:53.000 --> 00:27:02.000
+If I click get data, it goes to that very path that I specified in the form right bridge to nowhere.
+
+00:27:02.000 --> 00:27:11.000
+That was the path in the form tag yeah i'll hit the back button. I'll go back to the file that I was going after So So far.
+
+00:27:11.000 --> 00:27:20.000
+This is behaving the very same way that it would, if it was a traditional multi-page app right.
+
+00:27:20.000 --> 00:27:31.000
+What I would like to do is hijack. What happens when I click on this, get data button, and instead do my own custom stuff with the page.
+
+00:27:31.000 --> 00:27:41.000
+And that is what we're gonna do my friends here is the file.
+
+00:27:41.000 --> 00:27:57.000
+This script tag is going to bring in and so let's get started with what we need to do in order to make that happen.
+
+00:27:57.000 --> 00:28:11.000
+Now this is a very often seen bit of j query, quick round of like hands up! does.
+
+00:28:11.000 --> 00:28:15.000
+What I put up here makes sense just staring at it.
+
+00:28:15.000 --> 00:28:18.000
+Yeah, you've been exposed to jquery enough to look at that, and be like Yep.
+
+00:28:18.000 --> 00:28:25.000
+That's cool. all right, I get it 80% or more total Understand this already. right?
+
+00:28:25.000 --> 00:28:35.000
+There's something more I want to do with this which is more about programming in general, and a how to make this make sense directly and straight away.
+
+00:28:35.000 --> 00:28:43.000
+Okay, I want to show, And you may have heard me do this like much earlier in the boot camp.
+
+00:28:43.000 --> 00:28:50.000
+This business Of what is this highlighting a thing deciding what's inside that right?
+
+00:28:50.000 --> 00:28:58.000
+Like, for example, if I highlight the this piece of the line here, and I do a control X: right?
+
+00:28:58.000 --> 00:29:14.000
+Just to cut that part out. it's pretty clear what I'm. looking at here now, Right, it's object that came to us as the result of a function call right dollar sign is the magical J query function it's
+
+00:29:14.000 --> 00:29:17.000
+taking document as a parameter that returns an object.
+
+00:29:17.000 --> 00:29:33.000
+Dot ready is itself a function call which takes a callback right and So when i'm typing the callback I type in to start with, I type a blank function definition.
+
+00:29:33.000 --> 00:29:44.000
+Right. So here's here comes a callback like this like this, and like this great that's a blank function definition.
+
+00:29:44.000 --> 00:29:47.000
+That is the function that will be called when the document is ready.
+
+00:29:47.000 --> 00:29:59.000
+Yep. Then I drop my cursor in here and I hit. enter maybe a few times, even right, because you can add white space.
+
+00:29:59.000 --> 00:30:01.000
+It's just white space inside of a function definition.
+
+00:30:01.000 --> 00:30:15.000
+Okay, But that's makes this really weird and interesting thing It makes this triplet of characters close curly brace, close smooth brackets and semicolon right?
+
+00:30:15.000 --> 00:30:27.000
+That little triplet after a while. starts to Look like a single closing bracket on a thing right that your your mind will just scan over that.
+
+00:30:27.000 --> 00:30:39.000
+Oh, yeah, that's the ending of this whole line right the reason I'm going on and on about this is that Now, now that I've done that, now that I put my cursor in there and I've just added
+
+00:30:39.000 --> 00:30:49.000
+some white space. Right now I can type any bit of Javascript custom right?
+
+00:30:49.000 --> 00:30:53.000
+This can be Vanilla Javascript. it can be J.
+
+00:30:53.000 --> 00:31:10.000
+Query based It can use any library brought in it's line after line of custom stuff that I want to occur when that callback is called. so. I encourage you like to keep your syntax clean and so straightforward, and always
+
+00:31:10.000 --> 00:31:12.000
+without syntax errors is to open and close your brackets.
+
+00:31:12.000 --> 00:31:29.000
+Drop the mouse in and hit. enter a bunch of times, but know that at those new lines be cognizant of this, that new code, that custom code will run under a certain circumstance that is when that callback gets called keeping that straight in your mind
+
+00:31:29.000 --> 00:31:34.000
+is going to mean that you can understand what your code is doing as you go.
+
+00:31:34.000 --> 00:31:42.000
+Yeah, because we're gonna have more and more callbacks right. And seeing this is gonna start to feel like Oh, yeah, that's the closing of a of a thing, and into it itself.
+
+00:31:42.000 --> 00:31:46.000
+It's like it's one cut like those 3 characters are acting like one character.
+
+00:31:46.000 --> 00:31:55.000
+Yeah, Okay, for example, I can put alert hello world in their like that, Save?
+
+00:31:55.000 --> 00:32:02.000
+And I know that that single one custom line is the line that's going to get executed just as soon as the document is ready. right?
+
+00:32:02.000 --> 00:32:07.000
+So we go back here reload the page sure enough, as soon as the page is ready.
+
+00:32:07.000 --> 00:32:16.000
+I get my alert. Okay, that's just a nice front-end javascript trick for figuring out how to interpret your code.
+
+00:32:16.000 --> 00:32:27.000
+Great rather than doing an alert, though I want to do something different just as soon as the page is loaded up.
+
+00:32:27.000 --> 00:32:34.000
+I want to hire that form and call that event prevent default thing.
+
+00:32:34.000 --> 00:32:47.000
+I don't want to call it. right, away, I want to hijack it such that when the form is submitted, then I will prevent the default actions from happening.
+
+00:32:47.000 --> 00:32:57.000
+Okay, So let's do this in the jquery way then, right is very common with Jquery program with Jake Query programming.
+
+00:32:57.000 --> 00:33:12.000
+You should start by calling the jquery function and often You'll be passing it css selector here.
+
+00:33:12.000 --> 00:33:26.000
+I'm. selecting for this tag it's a form so I'm just selecting that thing then, as is often the case with J.
+
+00:33:26.000 --> 00:33:30.000
+Query stuff. I put a dot because I now have a J.
+
+00:33:30.000 --> 00:33:36.000
+Query dom element object that's been returned to me by that function call.
+
+00:33:36.000 --> 00:33:47.000
+And so i'm going to say on submit comma callback goes!
+
+00:33:47.000 --> 00:34:05.000
+Here. right. So since it's a callback i'm gonna type, my blank function call just the way I did at the beginning with my little song and dance right? i'm going to type out a complete function definition that is my
+
+00:34:05.000 --> 00:34:10.000
+callback. it's an anonymous function it sits here as a function value right?
+
+00:34:10.000 --> 00:34:16.000
+A function literal, if you will, getting passed in as the second parameter to the on function call.
+
+00:34:16.000 --> 00:34:27.000
+Well, I just typed it. no problem. i'm gonna drop my cursor in between those curly braces.
+
+00:34:27.000 --> 00:34:33.000
+He had enter a few times, and then do the exact same thing that I was telling you about at the opening of me talking about this file right now.
+
+00:34:33.000 --> 00:34:44.000
+I have lines 4, 5, 6. Those are the lines of code that would be executed when this form is submitted.
+
+00:34:44.000 --> 00:34:56.000
+Right That's the callback that i'm in right Now i'm flashing out any custom syntax code whatever I want right.
+
+00:34:56.000 --> 00:34:59.000
+This is where my creativity gets to kick in I can type.
+
+00:34:59.000 --> 00:35:10.000
+Whatever I want here, and that's the thing that's going to run when the form submits right not when the page is ready now, but this time it's on form submission.
+
+00:35:10.000 --> 00:35:23.000
+So just to prove it. Let's do that right alert monkey fuzz reload.
+
+00:35:23.000 --> 00:35:38.000
+Okay, I don't get an alert on page reload now, now it's when I click the form submission. I get my monkey fuzz alert right right at that moment Alert is a block and call it means
+
+00:35:38.000 --> 00:35:51.000
+it. Everything stops if I click this now it's going to continue on with what it was going to do after that as it stands so I can click my back button and go back to it don asks what's the difference
+
+00:35:51.000 --> 00:35:56.000
+between on Submit and Dot submit. One is an alias for the other.
+
+00:35:56.000 --> 00:36:04.000
+So no difference, except that the first, the second one, calls the first one behind the scene.
+
+00:36:04.000 --> 00:36:20.000
+Good good. Do you notice that? Okay, So that's the demo of how to get stuff to happen when when the user does a thing? Yeah, we just completely hijacked what happens when you submit a form?
+
+00:36:20.000 --> 00:36:31.000
+We said, Run our custom code first right? Do you see how you're getting a bit of a opening up the hood and messing with the gears of your browser.
+
+00:36:31.000 --> 00:36:40.000
+One more thing I should mention this callback inside an event.
+
+00:36:40.000 --> 00:37:08.000
+Handler actually accepts a parameter called event here, so that callback. He's going to run with knowledge of a variable called event. and it is, in fact, that very event that we run prevent default on like so so I can run
+
+00:37:08.000 --> 00:37:13.000
+event, Doc, prevent default, and I can run my alert.
+
+00:37:13.000 --> 00:37:27.000
+Say alert like So with exclamation points, Save back to here, reload, click on!
+
+00:37:27.000 --> 00:37:36.000
+Get data. I get my alert and no page reload.
+
+00:37:36.000 --> 00:37:47.000
+Right, So we've done it we've hijacked the form to where now?
+
+00:37:47.000 --> 00:37:50.000
+Because of this little snippet of j query that we've put into here.
+
+00:37:50.000 --> 00:37:59.000
+When the document's ready, it sets up this event Handler, this event, Handler has a callback that's associated with it.
+
+00:37:59.000 --> 00:38:17.000
+Where, when this event occurs, this code will run event prevent default and and then an alert But i've demonstrated for you how I can now open up lines in my editor and type arbitrary code in here
+
+00:38:17.000 --> 00:38:28.000
+that's gonna happen whenever this event occurs right including making our own Ajax calls.
+
+00:38:28.000 --> 00:38:46.000
+If we want, which we do want so let's do it but first a small diversion.
+
+00:38:46.000 --> 00:38:59.000
+Do people understand what i'm talking about when I say a publicly available Api show hands that make sense to folks.
+
+00:38:59.000 --> 00:39:04.000
+Yep, right. This is some of the magic of boot camp.
+
+00:39:04.000 --> 00:39:16.000
+Is that so much of what we are able to do as web programmers stands on the shoulders of the giants that have come before us.
+
+00:39:16.000 --> 00:39:36.000
+A ton of work by a lot of tech heads all across the world, releasing data, gathering data, making it available, storing it in databases, putting it on the Internet, making it so that we can find that data I would like to share
+
+00:39:36.000 --> 00:39:42.000
+around a few links, Because what we're about to do is pick?
+
+00:39:42.000 --> 00:40:00.000
+Where is it? No, no, no, no, it's in the readme please stand by.
+
+00:40:00.000 --> 00:40:22.000
+These are in the notes. Consider some of the following apis Okay, I'm going to paste this into our chat because i'm gonna go off of some of my previous scripts for this lecture, and instead i'm going to
+
+00:40:22.000 --> 00:40:29.000
+ask for your help to pick an Api that we should use for today's demo.
+
+00:40:29.000 --> 00:40:36.000
+Okay, So here's a big list of open public no authentication needed.
+
+00:40:36.000 --> 00:40:45.000
+Api's. I have my own personal favorite in this list It's actually XkCD: are people aware of the xkCD comic.
+
+00:40:45.000 --> 00:40:54.000
+Yeah, I think as time goes on through this boot camp you will be able to understand more and more of the xkCD jokes.
+
+00:40:54.000 --> 00:41:00.000
+Yeah, and they're awesome if you haven't been made aware of this comic.
+
+00:41:00.000 --> 00:41:14.000
+Yet dig into it. it's really really great but have a look through this list or any other list that you can find on Google, right?
+
+00:41:14.000 --> 00:41:30.000
+So this I found this list by doing the following Google search like this, and let's have some suggestions in the chat about any of these publicly available Api's.
+
+00:41:30.000 --> 00:41:52.000
+And if you know, if I agree and the class is like all over it, let's use that as our demo for today, right, just to prove how awesome Ajax calls our 2 api's that we can leverage for our own
+
+00:41:52.000 --> 00:41:58.000
+apps. right. Have you quick show of hands? Have you seen the finals?
+
+00:41:58.000 --> 00:42:04.000
+Some of the finals projects done by Web, the boot camp people before, maybe a third or a tenth of you.
+
+00:42:04.000 --> 00:42:08.000
+Maybe if you get a chance to go to a finals demo day, do it right?
+
+00:42:08.000 --> 00:42:13.000
+There are some amazing amazing projects. You 2 will be a writing, some of those amazing amazing projects.
+
+00:42:13.000 --> 00:42:22.000
+At some point you and a lot of the magic that makes the some of the best ones really awesome is because of the particular Apis that they're going after.
+
+00:42:22.000 --> 00:42:37.000
+If people having looked through this list or tried to find something I mean, feel free to jump in on the microphone and advocate for your particular Api.
+
+00:42:37.000 --> 00:42:41.000
+Otherwise. i'm going to be happy with just picking the xkCD one, because I've never done it as part of a demo.
+
+00:42:41.000 --> 00:42:49.000
+Vince asked an interesting question: What is the incentive of a website for making an Api for their data?
+
+00:42:49.000 --> 00:42:59.000
+Well think about Google and search. What is that? If not a huge massive Api over the whole web?
+
+00:42:59.000 --> 00:43:08.000
+Right if you're using somebody's api you they can know about you.
+
+00:43:08.000 --> 00:43:12.000
+They can be feeding you data for you to use that.
+
+00:43:12.000 --> 00:43:21.000
+They would like you to use recipe pages often charge money for their access to their api's.
+
+00:43:21.000 --> 00:43:23.000
+But maybe you have a question about why would anybody make anything available for free.
+
+00:43:23.000 --> 00:43:31.000
+Well, that's kind of what the whole web is in a way So why do people give away free information on the web?
+
+00:43:31.000 --> 00:43:44.000
+Lots and lots of different reasons. Government is totally into giving information out right open data projects within government.
+
+00:43:44.000 --> 00:43:51.000
+So many interesting things. Sometimes it's just for fun you know like XkCD.
+
+00:43:51.000 --> 00:43:56.000
+Suppose they sell a bunch of comics that way? Right?
+
+00:43:56.000 --> 00:44:13.000
+The joke. Api. Yeah. just for fun it's good practice it's good learning. But there's serious stuff. I mean the examples that I did before in my previous lectures were government covid data statistics Okay, anybody
+
+00:44:13.000 --> 00:44:17.000
+with strong opinions that others can thumbs up or thumbs down.
+
+00:44:17.000 --> 00:44:21.000
+Otherwise i'd like to proceed with the XkCD Api, so we can get the show on the road.
+
+00:44:21.000 --> 00:44:26.000
+Yeah, everybody cool with that expect the impatient people have put their thumbs up. Yeah.
+
+00:44:26.000 --> 00:44:30.000
+So let's get on with it, and thank you for for your impatience.
+
+00:44:30.000 --> 00:44:46.000
+Good. So with that in mind, let's look at the xkCD api documentation suitably terse I can submit.
+
+00:44:46.000 --> 00:44:50.000
+A get request to the Api and here's what comes back.
+
+00:44:50.000 --> 00:44:57.000
+Jason can submit it in the browser it's just a get request.
+
+00:44:57.000 --> 00:45:08.000
+I'm sending it to this api and I get Json data associated with a particular comic right because all the XkCD comics are indexed by an integer number here.
+
+00:45:08.000 --> 00:45:17.000
+614. In this case there's a really good xkCD comic about.
+
+00:45:17.000 --> 00:45:28.000
+Get not hit. Get that? I would like to show you by Why?
+
+00:45:28.000 --> 00:45:35.000
+Because git is so important to us in this boot camp So here's a comic.
+
+00:45:35.000 --> 00:45:45.000
+Give you a little time to read it. see if you feel that pain.
+
+00:45:45.000 --> 00:45:53.000
+Notice that every one of the execution D. Comics is indexed by this number.
+
+00:45:53.000 --> 00:46:12.000
+Right. So if I go to my Sample Api and I drop this number in here instead, now it comes back with the git info from that particular comic stored as Json.
+
+00:46:12.000 --> 00:46:27.000
+So today we're gonna play around with this we're gonna make our own Ajax calls and make a single page app that when I click that button I get some stuff to put on to the web.
+
+00:46:27.000 --> 00:46:42.000
+Page, and so let's do it here's the event prevent default.
+
+00:46:42.000 --> 00:46:53.000
+And next up as another line of code, just after having prevented the default.
+
+00:46:53.000 --> 00:47:05.000
+I want to make my own Ajax call j query style like so no semicolon.
+
+00:47:05.000 --> 00:47:12.000
+Then, is fine, no semicolon again, finally, a semicolon.
+
+00:47:12.000 --> 00:47:42.000
+So this is all one line of code right ajax it's gonna take a config object for its parameter url whoops that's just another here's the Url like so say comma method get that's
+
+00:47:50.000 --> 00:48:03.000
+our Ajax call then, and catch so cat is going to take a parameter.
+
+00:48:03.000 --> 00:48:07.000
+There's my callback here's a parameter called error?
+
+00:48:07.000 --> 00:48:22.000
+And so how about we do 2 things console dot log error.
+
+00:48:22.000 --> 00:48:37.000
+Terror like So and just for fun if we did have an error why don't we alert the error message as well into a big, annoying pop-up box?
+
+00:48:37.000 --> 00:48:44.000
+That's gonna take me to click Ok. on to be finished with it Right Test that out.
+
+00:48:44.000 --> 00:48:50.000
+The then clause is going to take a callback. right?
+
+00:48:50.000 --> 00:48:55.000
+So I type out the full blank function definition as per usual.
+
+00:48:55.000 --> 00:49:13.000
+This is going to have the data that comes back from the Ajax call going to end up inside the callback inside our then clause, drop the cursor in between the curly brices.
+
+00:49:13.000 --> 00:49:28.000
+Hit enter Any code I put here will run when the promise from the Ajax call comes back in the clear, for now I'm just going to put alert.
+
+00:49:28.000 --> 00:49:57.000
+To it worked like so actually, we could yeah that would be fine. And while we're at it, let's console log always put a label on your console logs the data all right?
+
+00:49:57.000 --> 00:50:15.000
+Rice. Go ahead. Sorry I have just 2 questions one so on line 5 Ajax Isn't in like it has the money signed before it.
+
+00:50:15.000 --> 00:50:20.000
+Yeah, it's not in brackets or anything is that right i'm just wondering about that.
+
+00:50:20.000 --> 00:50:31.000
+Yeah, that's very curious. I Agree right what it is is this it's that this is an object when you have J.
+
+00:50:31.000 --> 00:50:40.000
+Query. Now it turns out that that object can be called like a function.
+
+00:50:40.000 --> 00:50:45.000
+Right. let me say that as another, let me stand it another way.
+
+00:50:45.000 --> 00:50:55.000
+In javascript. all functions are objects maybe you didn't know that.
+
+00:50:55.000 --> 00:51:03.000
+But it's true, and so for any given object sorry for any given function.
+
+00:51:03.000 --> 00:51:11.000
+You can add properties to that object. One of those properties is another function call and sorry.
+
+00:51:11.000 --> 00:51:26.000
+Another defined function. It's dot ajax that object right This is kind of showing you just exactly how compact and really interesting architecture is built into J Query right?
+
+00:51:26.000 --> 00:51:31.000
+That dollar sign is a super powerful thing. Yes, it's a function.
+
+00:51:31.000 --> 00:51:39.000
+Yes, that Function's an object. Yes, it has a bunch of other properties, including methods like ajax attached right to the top level.
+
+00:51:39.000 --> 00:51:45.000
+There are more dollar dot for each right a bunch of other things.
+
+00:51:45.000 --> 00:51:51.000
+I can talk about the historical reasons why you may or may not use that to this day.
+
+00:51:51.000 --> 00:51:59.000
+Say so we've got to call the ajax it's going to come back to our then clause.
+
+00:51:59.000 --> 00:52:07.000
+Let's save it let's run this thing yeah so I go back to the page.
+
+00:52:07.000 --> 00:52:13.000
+I reloaded now a bit of debugging tools, a bit of debugging tricks here.
+
+00:52:13.000 --> 00:52:18.000
+I'm gonna right click and do view page source on this thing all right.
+
+00:52:18.000 --> 00:52:24.000
+I could have done, I could have opened the developer tools. but I also want to draw your attention to view page Source.
+
+00:52:24.000 --> 00:52:30.000
+We're going to talk about the difference between those in a second here's the page source.
+
+00:52:30.000 --> 00:52:35.000
+The page source shows me online 8 here, a script tag to my public. Sasha, Js.
+
+00:52:35.000 --> 00:52:41.000
+Ajax example about Js i'm gonna click that it's going to open yet another tab, and it's going to show me.
+
+00:52:41.000 --> 00:52:47.000
+Yep. this is my code. At that you are out. It is running this code.
+
+00:52:47.000 --> 00:52:54.000
+Great. That was just a way to confirm the exact code that's running on this exact page load.
+
+00:52:54.000 --> 00:53:05.000
+So here's that Now, when I click get data this page says object object.
+
+00:53:05.000 --> 00:53:14.000
+Okay, I wonder what's going on there back to the code.
+
+00:53:14.000 --> 00:53:25.000
+Maybe it alerted us with an error. maybe we're getting object object as an error.
+
+00:53:25.000 --> 00:53:38.000
+Here, so let's take a quick look where I want to look at my console with the console.
+
+00:53:38.000 --> 00:53:47.000
+Show the error. ryan Yes, I believe it would and so let's go Have a look if I open up my chrome developer tools.
+
+00:53:47.000 --> 00:53:54.000
+Indeed, I have 2 error messages. Haha! Southern.
+
+00:53:54.000 --> 00:54:07.000
+Interesting access to Xml. Http. request. At this you, Url, from origin. No.
+
+00:54:07.000 --> 00:54:12.000
+Has been blocked by course, policy super fascinating.
+
+00:54:12.000 --> 00:54:16.000
+We may have to retreat away from this Url after all.
+
+00:54:16.000 --> 00:54:23.000
+Or start to mess with cores stuff which we were going to do at the end of the lecture.
+
+00:54:23.000 --> 00:54:33.000
+So this is pretty interesting. But yeah, right away failed to load resource because of a cores restriction.
+
+00:54:33.000 --> 00:55:01.000
+So let's see part of the reason that this is happening because i'm loading this html directly as a file instead of it coming from a server that i'm controlling as a node express server
+
+00:55:01.000 --> 00:55:08.000
+for example. Then I can do some cores trickery I tell you what i'll debug this a little bit on the break.
+
+00:55:08.000 --> 00:55:29.000
+We'll take our 10 min with that in mind i'm gonna bring up a timer for 10 min, and backed by popular request.
+
+00:55:29.000 --> 00:55:59.000
+We've got snoopy the dog for 10 min of my walk this morning, so take your 10 min to take a real break, and when this countdown timer is done, we will meet again and deal with more of ajax.
+
+00:56:02.000 --> 00:56:32.000
+We'll give fin we'll give snoop the last word here.
+
+01:06:20.000 --> 01:06:49.000
+Good talk. we'll have my people talk with your people Okay, all right.
+
+01:06:49.000 --> 01:06:58.000
+Welcome back furiously bugging some cores issues in the background, and i'll let you know where we landed on that.
+
+01:06:58.000 --> 01:07:12.000
+It turns out that the XkCD api is set up to restrict cores requests of the type that we're making, and to get around it There's a another trick that we could use, But i'll have to tell
+
+01:07:12.000 --> 01:07:18.000
+you about that trick later. What i've done in the meantime, is switched it out for a different Api.
+
+01:07:18.000 --> 01:07:24.000
+That does not have this restriction on it and so we'll just go back to that to that Api call instead.
+
+01:07:24.000 --> 01:07:31.000
+In fact, that Api call is, in fact, the covid statistics in Canada.
+
+01:07:31.000 --> 01:07:37.000
+I will be looking for other Api. suggestions for future versions of this lecture.
+
+01:07:37.000 --> 01:07:45.000
+So if any of your travels you find interesting api's that you think would make a good one for this lecture, i'll switch over to that.
+
+01:07:45.000 --> 01:07:59.000
+But for now what i've done is brought that into place in the very same app that we were looking at before.
+
+01:07:59.000 --> 01:08:08.000
+And so here's the page when I reload it if I click, get data at this point. it says it worked because that was what our code did.
+
+01:08:08.000 --> 01:08:22.000
+And let's see here. great in fact, my alert could have an error.
+
+01:08:22.000 --> 01:08:29.000
+Label on it as well. i'm going to do that that way. so that next time, when there is an error, it'll be pretty clear what's happening.
+
+01:08:29.000 --> 01:08:35.000
+Okay. but it is good that Code has this kind of error handling.
+
+01:08:35.000 --> 01:08:42.000
+In fact, most good production level code is mostly error handling, Actually, right.
+
+01:08:42.000 --> 01:08:58.000
+You spend a lot of time rationalizing your mind around how to get Code to do a thing right to find out that that you're only really halfway down the rest of it is really good quality error handling happening after that all
+
+01:08:58.000 --> 01:09:06.000
+right, so it says it worked. Furthermore, it says that the data has been console logged to the console.
+
+01:09:06.000 --> 01:09:13.000
+So let's go and look for that and we will play around with xkCD again.
+
+01:09:13.000 --> 01:09:20.000
+Some other day. So back to the chrome developer tools.
+
+01:09:20.000 --> 01:09:36.000
+And here is the console and sure enough there's our console log that was output into here.
+
+01:09:36.000 --> 01:09:43.000
+This is the object that got consoled to the developer.
+
+01:09:43.000 --> 01:09:53.000
+Tools are awesome for this, because you get nice user interface so that you can interact with the javascript objects that you've discovered and made available here.
+
+01:09:53.000 --> 01:09:59.000
+So we have an object called data right it's got us all of these properties.
+
+01:09:59.000 --> 01:10:03.000
+Source. Url Country counts of the number of people who've passed away.
+
+01:10:03.000 --> 01:10:07.000
+History data a Url to how this data was put together.
+
+01:10:07.000 --> 01:10:18.000
+Total number of people infected i'm sure with Omicron. The this number is no longer precisely accurate, because people have been going and getting it and not getting tested.
+
+01:10:18.000 --> 01:10:29.000
+Necessarily. we have infected statistics by region broken down by province and territory. This number of repatriated travelers.
+
+01:10:29.000 --> 01:10:35.000
+I've noticed has not been incrementing but every time i've given the lecture.
+
+01:10:35.000 --> 01:10:42.000
+These numbers have been ticking up and increasing as they went but now it's becoming a bit of a historical footnote.
+
+01:10:42.000 --> 01:10:50.000
+Last updated more data or read me about the data.
+
+01:10:50.000 --> 01:10:53.000
+The particular Url that it's coming to us for the one that I'm.
+
+01:10:53.000 --> 01:11:08.000
+Particularly interested in for the purposes of today is this property infected by region down inside the this object that's coming back from this Url, Happy that they that the Api is working for us today.
+
+01:11:08.000 --> 01:11:13.000
+That it's bringing some data back we going to be able to use it.
+
+01:11:13.000 --> 01:11:21.000
+2 do dominion changing the html inserting new data into a page, and so on.
+
+01:11:21.000 --> 01:11:29.000
+And so we'll proceed like that and the dev tools are going to figure highly in what we do.
+
+01:11:29.000 --> 01:11:47.000
+So Let's change our code. let's make our code modify the Html page with the data that's come back from this Ajax.
+
+01:11:47.000 --> 01:11:58.000
+Call all right. So here's our query our function that has been called 2.
+
+01:11:58.000 --> 01:12:05.000
+Bring in data at the moment we're console logging it. that's fine.
+
+01:12:05.000 --> 01:12:11.000
+But we're going to want to do something more interesting with it, and so there's going to be a lot of J.
+
+01:12:11.000 --> 01:12:19.000
+Query here how to use jquery to do stuff, Dom manipulation, Dom traversal all that type of stuff.
+
+01:12:19.000 --> 01:12:25.000
+For example, I can take J. Query right, and as A.
+
+01:12:25.000 --> 01:12:28.000
+Jquery line often starts i'm going to call the Jquery function.
+
+01:12:28.000 --> 01:12:51.000
+I'm gonna call the jquery function with a particular css selector, if you remember, on the page itself, we had a div with an Id called display I'm going to target that div start inserting stuff into it so
+
+01:12:51.000 --> 01:13:01.000
+back to the code inside our callback, where the data cut back from the Api call.
+
+01:13:01.000 --> 01:13:18.000
+I want to start changing that tag. So I pass in a Css selector, and that corresponds to the Id. That element right? If an element has an Id of display, then my Css.
+
+01:13:18.000 --> 01:13:26.000
+Selector is hashtag display that's how I pluck out a particular dom element with J.
+
+01:13:26.000 --> 01:13:39.000
+Query next up. I want to set the content of that dom element, and so i'm going to use a j query function called html.
+
+01:13:39.000 --> 01:13:52.000
+Now Html is both a getter and a setter. You call this function with no parameter.
+
+01:13:52.000 --> 01:14:04.000
+Then the return value of this thing would be the content of that element like so.
+
+01:14:04.000 --> 01:14:10.000
+But i'm not going to use the html call in that way.
+
+01:14:10.000 --> 01:14:16.000
+Instead. I'm going to set the content of that particular Dom element.
+
+01:14:16.000 --> 01:14:26.000
+So, for example, I could put Hello, monkey fives like that.
+
+01:14:26.000 --> 01:14:31.000
+Say so. If I save that, go back to my page, reload it.
+
+01:14:31.000 --> 01:14:44.000
+Click on get data. Hello, monkey! Fuzz showed up in my page after I clicked it right notice.
+
+01:14:44.000 --> 01:14:51.000
+There was no page refresh here's a page refresh when I first load the page up right gonna click data get data.
+
+01:14:51.000 --> 01:14:58.000
+I don't know. if this comes through quickly enough given the latency of our zoom call, but check this out click get data bang right straight away.
+
+01:14:58.000 --> 01:15:05.000
+I get. Hello, monkey, Fuzz that's how fast the Api call was I get to render it right away?
+
+01:15:05.000 --> 01:15:12.000
+That's huge for user experience. Okay, but monkey fuzz is not what we want.
+
+01:15:12.000 --> 01:15:25.000
+In fact, what we want to insert here is some result that is a modification of the data, right?
+
+01:15:25.000 --> 01:15:29.000
+And let's split this out into its own function because it's going to be its own thing.
+
+01:15:29.000 --> 01:15:54.000
+But if we do something like const elements equals convert for display, or maybe convert to html yeah, even better.
+
+01:15:54.000 --> 01:16:13.000
+So we're going to take our data and we're going to convert that data into some html, and then take our elements variable, which is Html and set it here like some So now all we need to
+
+01:16:13.000 --> 01:16:23.000
+do to make a function called convert to Html, where we pass in the data object that comes back from this Api. then do whatever we want to.
+
+01:16:23.000 --> 01:16:28.000
+That data to generate a bunch of Html to insert here.
+
+01:16:28.000 --> 01:16:39.000
+Right. So just to test that little structure I could go back here make a function called convert to Html like.
+
+01:16:39.000 --> 01:16:45.000
+So that's my function definition right it takes a parameter called data.
+
+01:16:45.000 --> 01:16:50.000
+The I mean I could call this anything because it's a argument to my function Definition right?
+
+01:16:50.000 --> 01:16:55.000
+I could call it monkey fucks. I just have to use monkey fuzz as a variable inside here.
+
+01:16:55.000 --> 01:17:08.000
+If I was going to do that data, is fine though. But whatever the value of data at the moment, I can test this little function, Call out by returning some Html that's like hard coded right?
+
+01:17:08.000 --> 01:17:21.000
+I can put h one this is the chisel Yo something like that.
+
+01:17:21.000 --> 01:17:31.000
+Say something random, and we'll just test out this function call to see how the Html function call works back to the thing.
+
+01:17:31.000 --> 01:17:37.000
+Reload the page click on get data there was an h one tag that came back.
+
+01:17:37.000 --> 01:18:02.000
+It's even bigger text this time so that's the code. And now it comes to us that we want to take what's inside the data variable and convert it into some Html: So let's do that one thing I
+
+01:18:02.000 --> 01:18:19.000
+could do right away as a further test of what's going on is try something like this const return value equals Json dot stringify data.
+
+01:18:19.000 --> 01:18:42.000
+And then just return the return value like, So say so. Now, if I go back here reload yet data look at that.
+
+01:18:42.000 --> 01:18:52.000
+We got a complete Json representation of all of the data that was passed into it.
+
+01:18:52.000 --> 01:18:59.000
+And now we've shown it on the web page directly right I mean Hey, woohoo!
+
+01:18:59.000 --> 01:19:14.000
+We should celebrate the victories right? We just made an Ajax call prevented. The reloading of the page, displayed reasonably up-to-date data from this Api call.
+
+01:19:14.000 --> 01:19:23.000
+You can Google search all over the Web to find Apis that you can use for your own apps. Do very similar kinds of things.
+
+01:19:23.000 --> 01:19:29.000
+Make your own Api calls to different Urls based on user interactions.
+
+01:19:29.000 --> 01:19:34.000
+Take in that data and then display it, which is what we just did here.
+
+01:19:34.000 --> 01:19:41.000
+We can do a little better than this rather than just throwing Json right.
+
+01:19:41.000 --> 01:19:46.000
+Json is intended for programs and for programmers. Right?
+
+01:19:46.000 --> 01:19:51.000
+Html is how you take data and make it viewable by like real human beings.
+
+01:19:51.000 --> 01:20:02.000
+Right. So Let's do that. let's take this data let's write some code to make this pretty right cause no one wants to sit here reading source.
+
+01:20:02.000 --> 01:20:05.000
+Jason. Well, sometimes I want to read Source Json right?
+
+01:20:05.000 --> 01:20:11.000
+But most human beings would rather read some nice html. So let's let's pretty this up a little bit right.
+
+01:20:11.000 --> 01:20:13.000
+We are front-end programmers this week, after all.
+
+01:20:13.000 --> 01:20:43.000
+Right form over function. So instead of doing it, that way we're going to build up a return value now I am interested in the infected by region property here most of all, because within that property I have an array of objects each object inside
+
+01:20:47.000 --> 01:20:56.000
+that array being different, which that we can loop over.
+
+01:20:56.000 --> 01:20:59.000
+We could make an Html table out of that data.
+
+01:20:59.000 --> 01:21:17.000
+For example. right? So you know, our code let's do something like this. we're going to be looking at data Dot infected by region, and it looks camel case to me right.
+
+01:21:17.000 --> 01:21:24.000
+Let's just copy paste it. so that We know we got it right back here with spelling there.
+
+01:21:24.000 --> 01:21:29.000
+So that's the thing that I want to loop over so let's do it.
+
+01:21:29.000 --> 01:21:59.000
+4 region in or of I like of better here. like so and let's definitely establish our variable. we're going to be modifying this variable as we go.
+
+01:21:59.000 --> 01:22:04.000
+So the return value can start out as an empty string.
+
+01:22:04.000 --> 01:22:32.000
+This time like. So then, for each region object inside this array let's take a piece of it out and start tacking it onto our return value like something like this return value plus equals right because we're gonna concatenate more and
+
+01:22:32.000 --> 01:22:53.000
+more string onto this thing reed dot let's look at how it's structured region like so right this region.
+
+01:22:53.000 --> 01:22:59.000
+The one of our loop. We could have called this anything inside that object right?
+
+01:22:59.000 --> 01:23:07.000
+It's going to be there's an example of one of them. this whole line, in fact, here's another one.
+
+01:23:07.000 --> 01:23:16.000
+This is Newfoundland. He here's an that region happens to have 3 properties inside it, region infect accounted deceased count.
+
+01:23:16.000 --> 01:23:46.000
+So we'll add that on is, text, I think that we should also wrap this text in some html, say, for example, paragraph tags like, so Oh, that's not an object there we go concatenation
+
+01:23:53.000 --> 01:24:07.000
+operators with strings like that just as some sample code to look at here. so we'll save that that way, and so you'll see what's happening in this loop. we're going to make a paragraph
+
+01:24:07.000 --> 01:24:31.000
+tag for every region inside that object once that's done we'll return the return value to hear that'll go inside elements, and then that will become the Html that's set inside the display at div so go back
+
+01:24:31.000 --> 01:24:41.000
+here hit reload click, get data there we go right now it's looking good.
+
+01:24:41.000 --> 01:24:48.000
+It's just to set up paragraph Tags with all the region names that came out of the Api call.
+
+01:24:48.000 --> 01:25:04.000
+If at some point, for example, Quebec ceases to be a province of Canada, for whatever reason, right and the Api operator is keeping their data accurate.
+
+01:25:04.000 --> 01:25:09.000
+You know, then, that maybe this would get dropped from the list.
+
+01:25:09.000 --> 01:25:15.000
+The point being that the Api data can be real-time, live and accurate.
+
+01:25:15.000 --> 01:25:23.000
+Right. good. Now let's look at the elements on the page.
+
+01:25:23.000 --> 01:25:32.000
+Notice inside here in the dev tools. Now, Div, Id has some content.
+
+01:25:32.000 --> 01:25:44.000
+I can click on this and open up. And sure enough, Canada, Newfoundland, Labrador, Prince Edward Island, Nova Scotia, all the regions in the data, each with their own paragraph tags which
+
+01:25:44.000 --> 01:26:06.000
+raises an interesting point. This is the dev tools super useful, super important front-end developers live inside a dev tools because there's so much cool, awesome stuff to use inside here to debug and interact with how your page is being crafted
+
+01:26:06.000 --> 01:26:17.000
+right There's another representation of the page that I showed you before called View Source.
+
+01:26:17.000 --> 01:26:25.000
+There's a difference between view source and what you see inside the dev tools.
+
+01:26:25.000 --> 01:26:38.000
+Okay, View source shows you what the page looked like before Front end.
+
+01:26:38.000 --> 01:27:01.000
+Javascript ran weird so it's before the front end. Javascript ran after front-end Javascript runs, in fact, at any point in real time.
+
+01:27:01.000 --> 01:27:09.000
+Later on. Maybe there's set timeouts maybe there's weird asynchronous stuff happening to your Dom, because your javascript is modifying it right.
+
+01:27:09.000 --> 01:27:28.000
+You can check that state inside your dev tools that's going to be the up-to-date version of your Dom, and So view Page Source is actually a pretty good debugging, tool, because this will be the state of your
+
+01:27:28.000 --> 01:27:33.000
+html page before you get it before your code runs.
+
+01:27:33.000 --> 01:27:41.000
+Yeah, you can make sure that the divs are there that need to be there, so that you can then modify them later with your front end code. With J.
+
+01:27:41.000 --> 01:27:54.000
+Query, dawn, manipulation and whatnot right and Then you end up living in devtools while you're doing your debugging, because this is like the current state of your page. instead.
+
+01:27:54.000 --> 01:28:00.000
+Okay, but you know, I'm, not particularly fond of these paragraph tags.
+
+01:28:00.000 --> 01:28:04.000
+So I would like to start fleshing this data out.
+
+01:28:04.000 --> 01:28:17.000
+Maybe show the infected counts that are coming from this Api So I'm going to go back to the code here.
+
+01:28:17.000 --> 01:28:30.000
+Thank you for the reminder to declare this and so convert to Html.
+
+01:28:30.000 --> 01:28:37.000
+Right we're gonna change this around a little bit let's get the return value.
+
+01:28:37.000 --> 01:29:07.000
+Starting out with table tag like so and then after this loop Let's close that table like so and then convert our paragraphs into table row elements like so then inside here and in.
+
+01:29:11.000 --> 01:29:35.000
+Fact, let's step away from concatenation. operators and instead move towards backtick templates with string interpolation like so everybody comfortable with that change right?
+
+01:29:35.000 --> 01:29:46.000
+There's a variety of different ways. of putting strings together right, and each has their pros and cons this one's nice, because now I can just you know I don't have to have so many operators between my
+
+01:29:46.000 --> 01:29:59.000
+dynamic parts and my static parts so i'm going to wrap that with a td tag, because that's a part of my table.
+
+01:29:59.000 --> 01:30:09.000
+Html. At this point I can start to add more Tv elements to my rows to give my tables more columns.
+
+01:30:09.000 --> 01:30:28.000
+So we've got region infected. count I believe it was like so. So let's just see reload click get data. now.
+
+01:30:28.000 --> 01:30:40.000
+Rows with table data next to it could put a bit of inline styling on this to make the table more obvious.
+
+01:30:40.000 --> 01:30:49.000
+Border one P. X. solid you can have any color you want so long as it's black.
+
+01:30:49.000 --> 01:31:02.000
+Oh, It's around the whole table i'd like it to be around the Td.
+
+01:31:02.000 --> 01:31:32.000
+Elements as well. So we'll put that same style here reload reload that didn't work quite the way I wanted. Oh, it's because the tag disappeared Sorry about that reload and reload cool Yeah, all
+
+01:31:32.000 --> 01:31:43.000
+right. So there you go. Dynamic data brought in to a page via an Api call.
+
+01:31:43.000 --> 01:31:56.000
+And now i'm to the point where I can start massaging this code to make it look like I want it to look right.
+
+01:31:56.000 --> 01:32:02.000
+Think it makes sense to split off the styles and not do inline styling.
+
+01:32:02.000 --> 01:32:07.000
+But instead, put that in a separate file. Ask me towards the end of class, if you want to actually see.
+
+01:32:07.000 --> 01:32:12.000
+That done, I suspect that that you're that you're okay with how you would go about that yet.
+
+01:32:12.000 --> 01:32:35.000
+Pretty good good great. So at this stage we could continue fleshing this out and basically improving the html.
+
+01:32:35.000 --> 01:32:57.000
+But I think we're in pretty good shape that way This function basically just built up a string that string was a bunch of html and that string got returned back down here.
+
+01:32:57.000 --> 01:33:07.000
+And that's how the convert to html came back with a string of html.
+
+01:33:07.000 --> 01:33:09.000
+We just passed the html straight into this dot.
+
+01:33:09.000 --> 01:33:15.000
+Html J. query function call right so this dot html J.
+
+01:33:15.000 --> 01:33:33.000
+Query function call it's simply took a string and set the content of the display div to be that the browser knew what to do with it when it inserted that string Yeah, Okay, that's one broad
+
+01:33:33.000 --> 01:33:49.000
+technique. 4 Dom manipulation right you're editing the don you're actually to the dawn elements here. right?
+
+01:33:49.000 --> 01:34:03.000
+There's our table a new table element the dev tools recognize that Html as structure that it can look at this I can open and close the table with the little triangle carrot.
+
+01:34:03.000 --> 01:34:07.000
+Right. it's because the text happened to take on the html format.
+
+01:34:07.000 --> 01:34:11.000
+I can click into this with the dev tools. it added a teabody tag for me.
+
+01:34:11.000 --> 01:34:22.000
+I have a bunch of table row elements right the dev tools knows how to work with. I can click on any one of them to see what's inside those t r tags.
+
+01:34:22.000 --> 01:34:31.000
+All that good stuff. I want to show you a couple more tricks that you can do with.
+
+01:34:31.000 --> 01:34:42.000
+J. query and dom manipulation right because there's some alternative ways of going about things, and it would be good if you understand all of them.
+
+01:34:42.000 --> 01:34:59.000
+For example, rather than just inserting a string here let's try this a slightly different way to go back to my index.
+
+01:34:59.000 --> 01:35:07.000
+Html page and i'm gonna add the another div with a new name.
+
+01:35:07.000 --> 01:35:21.000
+Let's call it footer let's say so display and footer are now 2 divs on my page.
+
+01:35:21.000 --> 01:35:24.000
+I can put some more stuff inside here if I want to.
+
+01:35:24.000 --> 01:35:44.000
+Okay, So, having done that, Now, when i'm inside my code where here I've inserted the html that came back from that Api call, I want to show you some more stuff that I can do with J query when it comes
+
+01:35:44.000 --> 01:35:49.000
+to creating dom elements and adding them in to a document.
+
+01:35:49.000 --> 01:35:58.000
+For example, one thing I can do is I can call the J.
+
+01:35:58.000 --> 01:36:21.000
+Query function, but instead of calling it with a some css selector, I can actually call it with a string and pass it directly into Jquery.
+
+01:36:21.000 --> 01:36:49.000
+That will return to me a new Dom element i'm gonna go ahead and call it that call new dom element like So that new dot element was created by J.
+
+01:36:49.000 --> 01:37:10.000
+Query but it's not yet in the document in fact there's a method for naming your variables to make it clear that this variable is a dom element that is to put a dollar sign on the front of it
+
+01:37:10.000 --> 01:37:26.000
+It's a valid variable name so watch out for this when you're looking at your j query, you may find that there's sample code where you're making a new variable that has a dollar sign in
+
+01:37:26.000 --> 01:37:38.000
+front don't be Fooled it's still a variable name it's just a convention the kind of variable that you would bring back from J.
+
+01:37:38.000 --> 01:37:47.000
+Query when you run. J. query this way before I get to Pavlov's question, Ryan asks in the chat. Just curious.
+
+01:37:47.000 --> 01:37:54.000
+Is there a reason we have gone from using? Dot ejs last week to html this week?
+
+01:37:54.000 --> 01:38:08.000
+Well, of course, ejs files, are mostly html, anyway. right it's that those html files, if they're in the form of an ejs template allow you to put dynamic content into
+
+01:38:08.000 --> 01:38:18.000
+the middle of your html today. in this case we could have been running a node server in the back end.
+
+01:38:18.000 --> 01:38:28.000
+But we're not This is just a html file, and i'm, loading it directly into the browser without any node on the back end at all.
+
+01:38:28.000 --> 01:38:45.000
+Now in what you're doing you're probably going to have a node server with all the node trappings and all the good stuff that comes with node express right in particular views ejs templates right and so you would
+
+01:38:45.000 --> 01:38:55.000
+be editing an Ejs template file you could be putting dynamic content into that. But that would be being in inserted on the back end, not on the front end.
+
+01:38:55.000 --> 01:39:01.000
+Right. That's one of the things that can be hard for people to wrap their mind around.
+
+01:39:01.000 --> 01:39:07.000
+Am I dealing with the front end right now, or am I dealing with the back end right now?
+
+01:39:07.000 --> 01:39:13.000
+This is J. Query Code, with lots of dollar signs.
+
+01:39:13.000 --> 01:39:17.000
+Lots of dollar signed function calls right That's a dead giveaway.
+
+01:39:17.000 --> 01:39:32.000
+This is Javascript on the front end it's Javascript, where, if you ran console log, you should be looking for those console logs to show up here on the front end instead of inside your
+
+01:39:32.000 --> 01:39:41.000
+terminal. So there's no question that that can get a bit tricky, Right?
+
+01:39:41.000 --> 01:39:52.000
+This is where I think it's important to go back to this diagram, to understand where you're at right where the code you're writing.
+
+01:39:52.000 --> 01:40:01.000
+It executes in this from one click to the next hamster wheel that we're all on when we use the web.
+
+01:40:01.000 --> 01:40:09.000
+Yeah, good quest. good and interesting question, I should say, okay.
+
+01:40:09.000 --> 01:40:20.000
+So there's the way that you can create actual dom element in J.
+
+01:40:20.000 --> 01:40:29.000
+Query. It lives only in memory. so far. right this javascript is being run by the browser.
+
+01:40:29.000 --> 01:40:41.000
+We've got the dom that represents our html page, but we're also making dom elements that live outside that html page.
+
+01:40:41.000 --> 01:40:51.000
+Any thoughts on how we would go about inserting this new dom element into the page.
+
+01:40:51.000 --> 01:41:02.000
+A pinchild, a pen, all work. Html also works.
+
+01:41:02.000 --> 01:41:08.000
+These are all J Query functions right so i'm gonna call dollar sign.
+
+01:41:08.000 --> 01:41:17.000
+We could do it a few ways. dollar sign right now? i'm gonna pass a Css selector this time, and what did I call it?
+
+01:41:17.000 --> 01:41:39.000
+Twitter. Oh, yeah Footer Dot Let's try a pen append new dom element. How to work?
+
+01:41:39.000 --> 01:41:52.000
+Let's give it a shot back to here reload get data, Got all the data, Took a little longer to load that time.
+
+01:41:52.000 --> 01:42:05.000
+Where is my where's my life we got some debugging to do?
+
+01:42:05.000 --> 01:42:10.000
+Oh, it's a blank it's there but it's blank!
+
+01:42:10.000 --> 01:42:28.000
+Let's go back and prove that back to the elements footer sure enough, there's my h 4 tag didn't exist there before right here's this page still right it's got the footer no h 4 tag in
+
+01:42:28.000 --> 01:42:37.000
+it here, because this is before front, and javascript. ran Here it is after Java Script has run on the front end, and we have our h 4 tag in it.
+
+01:42:37.000 --> 01:42:51.000
+Let's go back to the code monkey fuzz right in here, save back here, free load click the get data and lucky advice.
+
+01:42:51.000 --> 01:43:13.000
+Sure enough, as child of the footer. If wicked back here, this would work just as well to call the html function instead of append.
+
+01:43:13.000 --> 01:43:27.000
+There one's going to call the other under the hood but remember, Html can be used as both the setter and a getter, whereas a pen would not do that.
+
+01:43:27.000 --> 01:43:33.000
+There's yet another way that you can do this with J.
+
+01:43:33.000 --> 01:43:43.000
+Query, where, instead of calling append, you can call append 2.
+
+01:43:43.000 --> 01:43:54.000
+It all depends on how you prefer to do think whether it's passive or active, since Google hammer effectively.
+
+01:43:54.000 --> 01:44:09.000
+But you could do something like dollar new Dom element penned 2 footer like that instead, right here.
+
+01:44:09.000 --> 01:44:21.000
+Only one of these is going to go let's try the append 2 way of doing things back here reload the page click get data, sure enough.
+
+01:44:21.000 --> 01:44:41.000
+Still works. Did you do much in the way of Dom Traversal when you were learning J. Query.
+
+01:44:41.000 --> 01:44:49.000
+To start with. Then i'll choose to insert just a little bit on this.
+
+01:44:49.000 --> 01:44:52.000
+It's a little bit off topic for ajax but it's something that you should know.
+
+01:44:52.000 --> 01:45:07.000
+So i'll add a little bit in here dom traversal is what you can do to drill down into particular.
+
+01:45:07.000 --> 01:45:37.000
+Dom structure to find an element that you're looking for So, for example, back on our original html page here, we could do something like look for the child of the footer, and whatever child we find of the footer
+
+01:45:37.000 --> 01:45:42.000
+that'll be the element that we insert the age 4 and 2.
+
+01:45:42.000 --> 01:45:54.000
+Yeah. So, for example, We're going to try to target that paragraph tag, and we're not going to use Css selectors to go after it.
+
+01:45:54.000 --> 01:46:01.000
+We're going to try dom traversal instead so now back here.
+
+01:46:01.000 --> 01:46:26.000
+Our custom code. let's do something like this child right so Dollar sign called with this Css.
+
+01:46:26.000 --> 01:46:33.000
+Selector gets us. Our div child is going to give us that.
+
+01:46:33.000 --> 01:46:37.000
+In fact, I need to look this up to Make sure I've got the right function name J.
+
+01:46:37.000 --> 01:46:45.000
+Query document tation. Think it might be children for example let's go after this in the docs.
+
+01:46:45.000 --> 01:47:07.000
+So, children a method get the children of Each element in the set of matched elements who has seen verbiage that looks like that in the J query docs. So So far it's it's basically this phrase and
+
+01:47:07.000 --> 01:47:12.000
+it's a bit of magic about how j query works when you pass it.
+
+01:47:12.000 --> 01:47:19.000
+A css selector it actually doesn't always just return one dom element.
+
+01:47:19.000 --> 01:47:25.000
+Sometimes it'll return a complete set of them right if you had a, you know.
+
+01:47:25.000 --> 01:47:27.000
+Give me all the paragraph tags or something like that right?
+
+01:47:27.000 --> 01:47:39.000
+It's going to return a collection of dom elements. and then the functions that you have, as in the chain after that are going to apply to every one of the groups of dom elements.
+
+01:47:39.000 --> 01:47:44.000
+Raise your hands if you if that sounds familiar if you've learned that about how that works.
+
+01:47:44.000 --> 01:47:52.000
+Yeah, Okay, So what children does is, it says, Get the children right?
+
+01:47:52.000 --> 01:48:08.000
+And so if we have only one child, we're going to have that dot children is going to return to us the one element. so we can do that at this point and to that we will append the new Dom. element. J.
+
+01:48:08.000 --> 01:48:15.000
+Query dom element that we created before on the previous line it's going to append it to the children of the footer.
+
+01:48:15.000 --> 01:48:29.000
+So we'll save that like that go back and reload it here reload, get data, and monkey Fuzz is still attached.
+
+01:48:29.000 --> 01:48:41.000
+But now it's inside the paragraph day What would happen if we had had more than one paragraph tag inside the footer.
+
+01:48:41.000 --> 01:48:54.000
+Then that Traversal is gonna find multiple children and do the append to all of them reload.
+
+01:48:54.000 --> 01:49:04.000
+Get the data. There are 3 monkey fuzzy because I had 3 paragraph guys.
+
+01:49:04.000 --> 01:49:08.000
+Okay, we've got some questions i'm sorry for the delay on the questions.
+
+01:49:08.000 --> 01:49:17.000
+Vince asked. Find seems more direct than sifting through children or parents?
+
+01:49:17.000 --> 01:49:23.000
+Yes, it may often be more direct. if you can put a css selector or a tag.
+
+01:49:23.000 --> 01:49:33.000
+Maybe that's sent into that find that'll be more robust when you've got a larger treat that you're trying to go down within right dot.
+
+01:49:33.000 --> 01:49:40.000
+Find takes a parameter. it takes an individual dom element and then it's going to find within that list.
+
+01:49:40.000 --> 01:49:46.000
+How do you grab a specific child so that'll be in the docks?
+
+01:49:46.000 --> 01:50:02.000
+Often it'll you can take a parameter on children, that'll say, give me the third child something like that. But i'm going to leave that to reading to the docs Now, Pablo, go ahead because we are talking about
+
+01:50:02.000 --> 01:50:10.000
+the Dom Traversal in the assignment that we did yesterday. I think we have for the Twitter App.
+
+01:50:10.000 --> 01:50:23.000
+There is a portion where we have to update the counter variable to show that the number that we're typing decreases as we type more, and we could have just like stated the element for the counter But it tells us
+
+01:50:23.000 --> 01:50:26.000
+specifically to do Dom Traversal to get to it.
+
+01:50:26.000 --> 01:50:31.000
+What was the reasoning behind that? to learn Dom Traversal? mostly.
+
+01:50:31.000 --> 01:50:46.000
+Okay? But the one thing is that once you start manipulating the Dom, you're not able to rely on the structure that the Dom originally had right.
+
+01:50:46.000 --> 01:50:51.000
+You could be deleting or adding large swaths of your html.
+
+01:50:51.000 --> 01:51:03.000
+You may have had selectors that were crafted, understanding that that thing was going to be there or not right.
+
+01:51:03.000 --> 01:51:14.000
+And so, once you start doing, dom manipulation it actually makes sense to use fine, because you may not know how many wrapping layers there are around the element that you're looking for.
+
+01:51:14.000 --> 01:51:20.000
+You may it may not even exist right and so if find doesn't return an element then.
+
+01:51:20.000 --> 01:51:32.000
+So and so like. For example, have you seen the wizzywig editors built into a web page before it's like a little miniature version of Microsoft word, right it's like embedded right in a
+
+01:51:32.000 --> 01:51:37.000
+web Page right? Imagine that you were coding that thing.
+
+01:51:37.000 --> 01:51:46.000
+You may have no idea what Html is sitting inside the text area inside a form, right?
+
+01:51:46.000 --> 01:52:08.000
+You're gonna need to be able to code for dom traversal discovery of what's there to know you know what's the best selector to use That's basically the answer in a nutshell Okay, good we
+
+01:52:08.000 --> 01:52:13.000
+reserved 8 more minutes before i'm gonna let you all go
+
+01:52:13.000 --> 01:52:23.000
+I did want to go back and touch on one more topic there's the course stuff and the the html actually the browser history.
+
+01:52:23.000 --> 01:52:30.000
+And these are more or less just pointers there's a nice article on Css.
+
+01:52:30.000 --> 01:52:37.000
+Tricks about the history Api. so I would encourage you to read that and take a look at some of the details.
+
+01:52:37.000 --> 01:52:54.000
+Let's just look at it together. briefly so in html 5 with the history Api built into Browsers
+
+01:52:54.000 --> 01:53:02.000
+The history you can replace State to replace the current pages.
+
+01:53:02.000 --> 01:53:09.000
+History entry in the stack of history locations that would, you would go back and forth between.
+
+01:53:09.000 --> 01:53:17.000
+You can push a state onto the history right where you've got a Url and a label.
+
+01:53:17.000 --> 01:53:32.000
+Say so when you push the state. It shows the Url right now how your app would actually react to moving back to that state is another thing right?
+
+01:53:32.000 --> 01:53:39.000
+You need to code your back end, to be responsive to particular paths to match.
+
+01:53:39.000 --> 01:53:56.000
+How you manage it in ajax so that's obviously a fair bit of complexity, something that you might want to look into at some point when you're writing your single page apps is still have a look at the urls that
+
+01:53:56.000 --> 01:54:01.000
+your single page app is storing in its history because users may bookmark those history.
+
+01:54:01.000 --> 01:54:09.000
+Urls right, and you want your app to Do its level best to return the user to that same state.
+
+01:54:09.000 --> 01:54:20.000
+We'll talk more about that in react week actually ways that you can do that more simply than coding everything from scratch.
+
+01:54:20.000 --> 01:54:32.000
+That's more push-state stuff and you can list out things through the same api.
+
+01:54:32.000 --> 01:54:43.000
+And whatnot I don't want to put too too much on emphasis on the details of this, but at least point you in the right direction.
+
+01:54:43.000 --> 01:54:46.000
+If it comes to where you would like to be managing your history.
+
+01:54:46.000 --> 01:54:54.000
+So do be aware of that, and then finally around cores.
+
+01:54:54.000 --> 01:54:58.000
+And that cores error that I ran into with the xkCD Api.
+
+01:54:58.000 --> 01:55:10.000
+You 2 may run into cores errors when you're using Api's, and there's a few routes around this.
+
+01:55:10.000 --> 01:55:17.000
+You do want to get into understanding cores in detail.
+
+01:55:17.000 --> 01:55:23.000
+There's actually quite a lot here to understand we've included in the notes.
+
+01:55:23.000 --> 01:55:31.000
+A Url to Mdn. which shows cores in all of its glory.
+
+01:55:31.000 --> 01:55:39.000
+Right. it's a mechanism for preventing apis being used side of their origins right?
+
+01:55:39.000 --> 01:55:44.000
+This would be for the case where you want to have an Api.
+
+01:55:44.000 --> 01:55:52.000
+But you don't want other sites to be able to use it So modern browsers are set up.
+
+01:55:52.000 --> 01:55:59.000
+They to honor headers in your responses from your web server?
+
+01:55:59.000 --> 01:56:11.000
+If you say I don't want this api to be used by anyone but me, you can build that straight into your web server to say so in the responses that come back.
+
+01:56:11.000 --> 01:56:40.000
+Notice, though, that it's the browser that's in fourcing this policy. that's kind of weird because it turns out that you can You can add a browser extension to chrome that will make it ignore those
+
+01:56:40.000 --> 01:56:55.000
+headers and use the Api anyway. which is one way that you can get around cores, restrictions for api's is to go ahead and install that browser extension in your browser.
+
+01:56:55.000 --> 01:57:00.000
+That will only work on your browser after that right.
+
+01:57:00.000 --> 01:57:21.000
+One thing I did want to show, though, was a code snippet, that you may find useful in your express apps, and that is how to set up questions, cores, headers, your own express apps.
+
+01:57:21.000 --> 01:57:34.000
+So here is a bit of boilerplate code that you would add to your own app to put cores headers into your app's own response.
+
+01:57:34.000 --> 01:57:44.000
+Headers. right? So website you wish to allow to connect to your server local host and your port.
+
+01:57:44.000 --> 01:57:55.000
+If you're trying to restrict it, to your app that's delivering your own api right access control allow methods, how many of the different methods can you use?
+
+01:57:55.000 --> 01:58:12.000
+How many of the different Http verbs are used to allow to happen through Ajax requests and access control headers set to true if you need the website to include cookies in the requests sent to the Api and So and so on in
+
+01:58:12.000 --> 01:58:22.000
+session, such, etc. Right? And so this boilerplate code snippet is included in the express app in the notes for today.
+
+01:58:22.000 --> 01:58:27.000
+So if you find a need for that, you can dig into the notes that way to figure out all this stuff.
+
+01:58:27.000 --> 01:58:34.000
+Right. Notice this one last thing before I let you all go.
+
+01:58:34.000 --> 01:58:48.000
+In the Ajax request that we made method was a thing that was specified as to how this Ajax request was going to be made.
+
+01:58:48.000 --> 01:58:53.000
+I can make Ajax requests that do get requests.
+
+01:58:53.000 --> 01:59:13.000
+I can make Ajax requests that do post requests, and you may remember that the http verbs, when you were writing your express apps, get and post. were the only 2 verbs that you can put on a form right under the
+
+01:59:13.000 --> 01:59:22.000
+method attribute. you were either making your forms have the get method or the post method, just like you did in tiny App.
+
+01:59:22.000 --> 01:59:42.000
+All those other Http verbs are available to you, though here under method could be put, or patch or delete.
+
+01:59:42.000 --> 01:59:53.000
+Among others. right? So any valid http verb can go with your Ajax requests in fact.
+
+01:59:53.000 --> 02:00:01.000
+That's how you would do most of your crazier Api work would be done in ajax.
+
+02:00:01.000 --> 02:00:12.000
+Okay, So back to the original directory in the shared code.
+
+02:00:12.000 --> 02:00:21.000
+For just one last thing. thanks to those of you who checked into slack early.
+
+02:00:21.000 --> 02:00:27.000
+I'm just gonna open up this file today's learning objectives ants with answers.
+
+02:00:27.000 --> 02:00:37.000
+This time. what is Ajax? What are some advantages?
+
+02:00:37.000 --> 02:00:42.000
+Disadvantages, cores where are the implications on browser history, and so on.
+
+02:00:42.000 --> 02:00:54.000
+That's available as a file in the sample code that's been uploaded to the git repository, and so those will go out with the notes. as Well, have a look at those and let me know how that how
+
+02:00:54.000 --> 02:01:04.000
+that's working out in terms of your understanding the material Let's leave it at that click like, and subscribe Hope my beer and watch this. have a good time with your compass this afternoon, doing ajax and getting some
+
+02:01:04.000 --> 02:01:18.000
+first-hand experience, with just how awesome your finals projects can be given that they can leverage apis pure Ajax.
+
+02:01:18.000 --> 02:01:48.000
+Believe it at that. Thanks very much. good luck and Have fun hang around.
+
