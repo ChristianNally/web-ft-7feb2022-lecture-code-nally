@@ -1,0 +1,13 @@
+                         question                          
+-----------------------------------------------------------
+ What is a database?
+ What is a WHERE clause?
+ What is a JOIN clause?
+ What is a query?
+ How do I INSERT rows into a table?
+ What are the four types of commands for databases?
+ What is an ERD?
+ What is a table?
+ What are the queries that correspond to the CRUD actions?
+ How do I create a table?
+

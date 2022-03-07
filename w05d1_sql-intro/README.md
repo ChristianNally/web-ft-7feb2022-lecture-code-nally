@@ -116,3 +116,21 @@ SELECT count(day_id)
 FROM objectives 
 GROUP BY day_id 
 HAVING count(day_id) > 3;
+
+
+#
+# The Tiers Must Be Self Consistent
+#
+
+There are three parts of a deployment for a webapp or database.
+
+1) Code (e.g. v3.3)
+2) Database (references to image paths)
+3) Files (images, audio, video, ...)
+
+The code will depend on a particular version of the database structure. The database will have rows that point
+to specific files (images, etc.) that have been uploaded.
+
+So, if you want to restore a webapp from backups, or if you want to transmit a copy of a webapp to a 
+teammate, you need to specific all three layers and send a copy of each of those layers. Those layers must 
+be self-consistent and compatible with each other.

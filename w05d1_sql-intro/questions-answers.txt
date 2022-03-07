@@ -1,0 +1,31 @@
+-[ RECORD 1 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What is a database?
+answer   | A database is a collection of tables. The collection is typically used as a set. A connection to a database is granted via a username and password.
+-[ RECORD 2 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What is a WHERE clause?
+answer   | A query can filter or restrict the information that results via a WHERE clause.
+-[ RECORD 3 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What is a JOIN clause?
+answer   | The data that a query has access to, can be expanded via JOIN-ing two tables together.
+-[ RECORD 4 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What is a query?
+answer   | A query is a task executed against a database, table or combination of tables. e.g. SELECT, INSERT, etc.
+-[ RECORD 5 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | How do I INSERT rows into a table?
+answer   | INSERT INTO objectives(id, type, question, answer, sort)\nVALUES (21, w05d1, "How do I INSERT rows into a table?", "solution goes here",2);
+-[ RECORD 6 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What are the four types of commands for databases?
+answer   | DDL, DML, DCL, and TCL. See: https://stackoverflow.com/questions/2578194/what-are-ddl-and-dml
+-[ RECORD 7 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What is an ERD?
+answer   | In the context of databases, an ERD is a diagram that shows each table as an entity, and also shows the relationships between tables.
+-[ RECORD 8 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What is a table?
+answer   | A table is a set of data collected as columns and rows.
+-[ RECORD 9 ]-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | What are the queries that correspond to the CRUD actions?
+answer   | The CRUD queries are: INSERT, SELECT, UPDATE and DELETE.
+-[ RECORD 10 ]----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+question | How do I create a table?
+answer   | CREATE TABLE objectives\n(\n    id bigint,\n    day_id character varying(5),\n    type character varying(12),\n    question text,\n    answer text,\n    sort smallint\n)
+
