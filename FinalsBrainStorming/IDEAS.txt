@@ -1,0 +1,24 @@
+# List of Ideas (so far...)
+
+EAST COAST!!!
+
+guy: connect businesses with foodbanks and volunteers to prevent food waste
+andrew: web-sourced-scraped cultural events tagged calendar/maps
+gabriel: sports players matching /  tournament manager
+noah: live streaming video map/list
+justin: popular stock forum trend detector scraper, ticker. stretch: a top ranked buzz list
+roy: monetized /r/place 
+tianhao: messaging, groups, DMs, voice and/or video + saurab: messaging sockets, graphql (postgres backend)
+sasu: job search based on interests / experience (beyond your average resume), bundle for friends (like LinkedIn)
+stefani: multi vehicle 'road trip' network with maps etc. (and maybe even voice control to prevent death)
+james: fitness tracker: running distance/time, gym workouts, weekly planner (stretch: position tracker)
+andrew: 'r/place' for audio... audio junkyard, watches your trash directory for audio and shares it
+carmen: public or private: studyroom app with sharable links
+tianhao: chrome extension link blocker/blackouts for productivity
+
+
+# Next Steps
+
+[] 'Network' and Brainstorm with your colleages and find yourself an idea and a group
+[] Let go of being in charge and get ready to collaborate
+[] Build some real Internet for yourself and your users
